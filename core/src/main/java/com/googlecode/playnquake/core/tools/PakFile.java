@@ -30,21 +30,17 @@ public class PakFile {
       (('K' << 24) + ('C' << 16) + ('A' << 8) + 'P');
 
   private ByteBuffer packhandle;
-  private AsyncFilesystem fs;
-  private String destination;
   private int numpackfiles;
   
-  PakFile(ByteBuffer packhandle) {
+  public PakFile(ByteBuffer packhandle) {
     this.packhandle = packhandle;
-    this.fs = fs;
-    this.destination = destination;
     
     int ident = packhandle.getInt();
     int dirofs = packhandle.getInt();
     int dirlen = packhandle.getInt();
 
     if (ident != IDPAKHEADER) {
-       throw new RuntimeException("Data is not a packfile");
+       throw new RuntimeException("Data is not a packfile. ident: " + Integer.toHexString(ident));
     }
   
     numpackfiles = dirlen / SIZE;
@@ -57,8 +53,8 @@ public class PakFile {
   }
   
 
-  public void unpack(final AsyncFilesystem fs, final String destination, final Callback<Void> readyCallback) {
-    if (numpackfiles == 0) {
+  public void unpack(final Tools tools, final Callback<Void> readyCallback) {
+    if (numpackfiles-- == 0) {
       readyCallback.onSuccess(null);
       return;
     }
@@ -67,13 +63,15 @@ public class PakFile {
     packhandle.get(tmpText);
 
     String name = new String(tmpText).trim();
+    tools.println("Unpacking " + name);
+
     int filepos = packhandle.getInt();
     int filelen = packhandle.getInt();
 
-    fs.saveFile(destination + name, packhandle, filepos, filelen, new Callback<Void>() {
+    tools.getFileSystem().saveFile(name, packhandle, filepos, filelen, new Callback<Void>() {
       @Override
       public void onSuccess(Void result) {
-        unpack(fs, destination, readyCallback);
+        unpack(tools, readyCallback);
       }
 
       @Override
