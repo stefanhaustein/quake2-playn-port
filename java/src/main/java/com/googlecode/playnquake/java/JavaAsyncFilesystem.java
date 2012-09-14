@@ -3,11 +3,11 @@ package com.googlecode.playnquake.java;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 
 import playn.core.PlayN;
 import playn.core.util.Callback;
@@ -16,6 +16,7 @@ import com.googlecode.playnquake.core.tools.AsyncFilesystem;
 
 public class JavaAsyncFilesystem implements AsyncFilesystem{
 
+  
   File root;
   public JavaAsyncFilesystem(String rootPath) {
     this.root = new File(rootPath);
@@ -38,11 +39,21 @@ public class JavaAsyncFilesystem implements AsyncFilesystem{
   }
 
   @Override
-  public void getDirectory(final String filename, final Callback<String[]> callback) {
+  public void processFiles(final String dirName, final Callback<Entry> processCallback, final Callback<Void> readyCallback) {
     PlayN.invokeLater(new Runnable() {
       @Override
       public void run() {
-        callback.onSuccess(new File(root, filename).list());
+        File dir = new File(root, dirName);
+        for (String fileName: dir.list()) {
+          Entry entry = new Entry();
+          entry.directory = new File(dir, fileName).isDirectory();
+          entry.name = fileName;
+          entry.fullPath = new File(dirName, fileName).getPath();
+          processCallback.onSuccess(entry);
+          
+          
+        }
+        readyCallback.onSuccess(null);
       }
     });
   }
