@@ -323,12 +323,16 @@ public abstract class GlRenderer implements Renderer {
     // gl.glDisable(GLAdapter.GL_ALPHA_TEST);
 
     Images.GL_Bind(image.texnum);
-    GlState.gl.glBegin(GL11.SIMPLE_TEXUTRED_QUAD);
-    GlState.gl.glVertex2f(x, y);
-    GlState.gl.glVertex2f(x + w, y);
-    GlState.gl.glVertex2f(x + w, y + h);
-    GlState.gl.glVertex2f(x, y + h);
-    GlState.gl.glEnd();
+    GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, MeshBuilder.OPTION_TEXTURE);
+    GlState.meshBuilder.texCoord2f(0, 0);
+    GlState.meshBuilder.vertex2f(x, y);
+    GlState.meshBuilder.texCoord2f(1, 0);
+    GlState.meshBuilder.vertex2f(x + w, y);
+    GlState.meshBuilder.texCoord2f(1, 1);
+    GlState.meshBuilder.vertex2f(x + w, y + h);
+    GlState.meshBuilder.texCoord2f(0, 1);
+    GlState.meshBuilder.vertex2f(x, y + h);
+    GlState.meshBuilder.end(GlState.gl);
 
     // if ( ( ( gl_config.renderer == GL_RENDERER_MCD ) || ( (gl_config.renderer
     // & GL_RENDERER_RENDITION) !=0 ) ) && !image.has_alpha)
@@ -420,10 +424,10 @@ public abstract class GlRenderer implements Renderer {
 
     int color = QuakeImage.PALETTE_ABGR[colorIndex];
 
-    GlState.gl.glColor3ub((byte) ((color >> 0) & 0xff), // r
+    GlState.gl.glColor4ub((byte) ((color >> 0) & 0xff), // r
         (byte) ((color >> 8) & 0xff), // g
-        (byte) ((color >> 16) & 0xff) // b
-        );
+        (byte) ((color >> 16) & 0xff), // b
+        (byte) 255);
 
     GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, 0);
 
@@ -432,7 +436,7 @@ public abstract class GlRenderer implements Renderer {
     GlState.meshBuilder.vertex2f(x + w, y + h);
     GlState.meshBuilder.vertex2f(x, y + h);
 
-    GlState.meshBuilder.end(gl.glEnd());
+    GlState.meshBuilder.end(GlState.gl);
     GlState.gl.glColor4f(1, 1, 1, 1);
     GlState.gl.glEnable(GL11.GL_TEXTURE_2D);
   }
@@ -482,12 +486,16 @@ public abstract class GlRenderer implements Renderer {
 
     Images.GL_Bind(image.texnum);
 
-    GlState.meshBuilder.begin(GL11.SIMPLE_TEXUTRED_QUAD);
+    GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, MeshBuilder.OPTION_TEXTURE);
+    GlState.meshBuilder.texCoord2f(0, 0);
     GlState.meshBuilder.vertex2f(x, y);
+    GlState.meshBuilder.texCoord2f(1, 0);
     GlState.meshBuilder.vertex2f(x + image.width, y);
+    GlState.meshBuilder.texCoord2f(1, 1);
     GlState.meshBuilder.vertex2f(x + image.width, y + image.height);
+    GlState.meshBuilder.texCoord2f(0, 1);
     GlState.meshBuilder.vertex2f(x, y + image.height);
-    GlState.gl.glEnd();
+    GlState.meshBuilder.end(GlState.gl);
 
     // if ( ( ( gl_config.renderer == GL_RENDERER_MCD ) || ( (gl_config.renderer
     // & GL_RENDERER_RENDITION) != 0 ) ) && !image.has_alpha)
@@ -752,12 +760,13 @@ public abstract class GlRenderer implements Renderer {
     if (GlConfig.gl_drawbuffer.modified) {
       GlConfig.gl_drawbuffer.modified = false;
 
-      if (GlState.camera_separation == 0 || !GlState.stereo_enabled) {
-        if (GlConfig.gl_drawbuffer.string.equalsIgnoreCase("GL_FRONT"))
-          GlState.gl.glDrawBuffer(GL11.GL_FRONT);
-        else
-          GlState.gl.glDrawBuffer(GL11.GL_BACK);
-      }
+      System.out.println("glDrawBuffer commented out here.");
+//      if (GlState.camera_separation == 0 || !GlState.stereo_enabled) {
+//        if (GlConfig.gl_drawbuffer.string.equalsIgnoreCase("GL_FRONT"))
+//          GlState.gl.glDrawBuffer(GL11.GL_FRONT);
+//        else
+//          GlState.gl.glDrawBuffer(GL11.GL_BACK);
+//      }
     }
 
     /*

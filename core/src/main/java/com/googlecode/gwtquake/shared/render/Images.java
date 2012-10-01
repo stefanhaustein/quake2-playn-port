@@ -1004,7 +1004,7 @@ public abstract class Images {
             // TODO jogl bug
             texnumBuffer.clear();
             texnumBuffer.put(0,image.texnum);
-            GlState.gl.glDeleteTextures(texnumBuffer);
+            GlState.gl.glDeleteTextures(1, texnumBuffer);
             image.clear();
         }
     }
@@ -1084,7 +1084,7 @@ public abstract class Images {
             // TODO jogl bug
             texnumBuffer.clear();
             texnumBuffer.put(0,image.texnum);
-            GlState.gl.glDeleteTextures(texnumBuffer);
+            GlState.gl.glDeleteTextures(1, texnumBuffer);
             image.clear();
         }
     }
