@@ -957,7 +957,7 @@ public class Models  {
 			starmod.numleafs = bm.visleafs;
 		}
 		
-        Surfaces.staticBufferId = GlState.gl.generateStaticBufferId();
+//        Surfaces.staticBufferId = GlState.gl.generateStaticBufferId();
 	}
 
 	/*
@@ -1348,7 +1348,7 @@ public class Models  {
 			pos += count;
 		}
 		
-		model.staticTextureBufId = GlState.gl.generateStaticBufferId();
+	//	model.staticTextureBufId = GlState.gl.generateStaticBufferId();
 	}
 		
 	static void resetModelArrays() {

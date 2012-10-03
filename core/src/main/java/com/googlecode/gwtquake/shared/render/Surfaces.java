@@ -201,13 +201,19 @@ public abstract class Surfaces {
   private static void glInterleavedArraysT2F_V3F(int byteStride,
       FloatBuffer buf, int staticDrawIdV) {
     GlState.gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-    GlState.gl.glVertexAttribPointer(GL11.ARRAY_TEXCOORD_0, 2,
-        GL11.GL_FLOAT, false, byteStride, 0, buf, staticDrawIdV);
+    
+    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, byteStride, buf);
+//    GlState.gl.glVertexAttribPointer(GL11.ARRAY_TEXCOORD_0, 2,
+//        GL11.GL_FLOAT, false, byteStride, 0, buf, staticDrawIdV);
+
+    int position = buf.position();
+    buf.position(position + 2);
 
     GlState.gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-    // gl.glVertexPointer(3, byteStride, buf);
-    GlState.gl.glVertexAttribPointer(GL11.ARRAY_POSITION, 3,
-        GL11.GL_FLOAT, false, byteStride, 8, buf, staticDrawIdV);
+    GlState.gl.glVertexPointer(3, GL11.GL_FLOAT, byteStride, buf);
+    //GlState.gl.glVertexAttribPointer(GL11.ARRAY_POSITION, 3,
+    //    GL11.GL_FLOAT, false, byteStride, 8, buf, staticDrawIdV);
+    buf.position(position);
   }
 
   /**
@@ -391,9 +397,17 @@ public abstract class Surfaces {
     Images.GL_TexEnv(GL11.GL_MODULATE);
     // gl.glTexCoordPointer(2, Polygon.BYTE_STRIDE, globalPolygonTexCoord1Buf);
     GlState.gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-    GlState.gl.glVertexAttribPointer(GL11.ARRAY_TEXCOORD_1, 2,
-        GL11.GL_FLOAT, false, Polygons.BYTE_STRIDE, 20,
-        globalPolygonInterleavedBuf, staticBufferId);
+
+
+//    GlState.gl.glVertexAttribPointer(GL11.ARRAY_TEXCOORD_1, 2,
+//        GL11.GL_FLOAT, false, Polygons.BYTE_STRIDE, 20,
+//        globalPolygonInterleavedBuf, staticBufferId);
+    // Replaced by:
+    GlState.gl.glClientActiveTexture(GL11.GL_TEXTURE1);
+    int position = globalPolygonInterleavedBuf.position();
+    globalPolygonInterleavedBuf.position(position + 5);
+    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, Polygons.BYTE_STRIDE, globalPolygonInterleavedBuf);
+    globalPolygonInterleavedBuf.position(position);
 
     R_DrawInlineBModel();
 
@@ -456,10 +470,13 @@ public abstract class Surfaces {
 
     Images.GL_SelectTexture(GL11.GL_TEXTURE1);
     GlState.gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-    GlState.gl.glVertexAttribPointer(GL11.ARRAY_TEXCOORD_1, 2,
-        GL11.GL_FLOAT, false, Polygons.BYTE_STRIDE, 20,
-        globalPolygonInterleavedBuf, staticBufferId);
-    // gl.glTexCoordPointer(2, Polygon.BYTE_STRIDE, globalPolygonTexCoord1Buf);
+//    GlState.gl.glVertexAttribPointer(GL11.ARRAY_TEXCOORD_1, 2,
+//        GL11.GL_FLOAT, false, Polygons.BYTE_STRIDE, 20,
+//        globalPolygonInterleavedBuf, staticBufferId);
+    int position = globalPolygonInterleavedBuf.position();
+    globalPolygonInterleavedBuf.position(position + 5);
+    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, Polygons.BYTE_STRIDE, globalPolygonTexCoord1Buf);
+    globalPolygonInterleavedBuf.position(position);
 
     if (GlConfig.gl_lightmap.value != 0)
       Images.GL_TexEnv(GL11.GL_REPLACE);

@@ -416,8 +416,9 @@ public class Mesh {
     FloatBuffer tc0 = paliashdr.textureCoordBuf;
     int limit = tc0.limit();
     tc0.limit(tc0.position() + pos * 2);
-    GlState.gl.glVertexAttribPointer(GL11.GL_ARRAY_TEXCOORD_0, 2, GL11.GL_FLOAT, false, 0, 0,
-        paliashdr.textureCoordBuf, paliashdr.staticTextureBufId);
+    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, paliashdr.textureCoordBuf);
+//    GlState.gl.glVertexAttribPointer(GL11.GL_ARRAY_TEXCOORD_0, 2, GL11.GL_FLOAT, false, 0, 0,
+//        paliashdr.textureCoordBuf, paliashdr.staticTextureBufId);
     tc0.limit(limit);
 
     dstVertexCoords.flip();
