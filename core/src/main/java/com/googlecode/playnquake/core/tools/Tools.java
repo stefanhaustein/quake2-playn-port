@@ -8,5 +8,4 @@ public interface Tools {
   AsyncFilesystem getFileSystem();
   ByteBuffer convertToPng(Image image);
   void println(String text);
-  
 }

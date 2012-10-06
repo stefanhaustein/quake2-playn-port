@@ -29,7 +29,6 @@ public class Compatibility {
 	public interface Impl {
 		int floatToIntBits(float f);
 		float intBitsToFloat(int i);
-		String createString(byte[] b, int ofs, int length);
 		String getOriginatingServerAddress();
 		void printStackTrace(Throwable e);
 		void loadClass(String name) throws ClassNotFoundException;
@@ -48,11 +47,15 @@ public class Compatibility {
 	}
 
 	public static String newString(byte[] b) {
-		return impl.createString(b, 0, b.length);
+		return newString(b, 0, b.length);
 	}
 	
 	public static String newString(byte[] b, int s, int l) {
-		return impl.createString(b, s, l);
+	  StringBuffer sb = new StringBuffer(l);
+      for (int i = 0; i < l; i++) {
+          sb.append((char) b[s + i]);
+      }
+      return sb.toString();
 	}
 	
 	public static String newString(byte[] b, String encoding) throws UnsupportedEncodingException {

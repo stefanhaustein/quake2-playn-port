@@ -38,6 +38,7 @@ import com.googlecode.gwtquake.shared.common.ExecutableCommand;
 import com.googlecode.gwtquake.shared.common.QuakeImage;
 import com.googlecode.gwtquake.shared.game.Commands;
 import com.googlecode.gwtquake.shared.game.ConsoleVariable;
+import com.googlecode.gwtquake.shared.sys.KBD;
 import com.googlecode.gwtquake.shared.util.Lib;
 import com.googlecode.gwtquake.shared.util.Vargs;
 
@@ -46,11 +47,11 @@ import com.googlecode.gwtquake.shared.util.Vargs;
  * 
  * @author dsanders/cwei
  */
-public abstract class GlRenderer implements Renderer {
+public class GlRenderer implements Renderer {
   int width;
   int height;
 
-  protected GlRenderer(int width, int height) {
+  public GlRenderer(int width, int height) {
     this.width = width;
     this.height = height;
   }
@@ -798,4 +799,21 @@ public abstract class GlRenderer implements Renderer {
     Entities.R_Clear();
   }
 
+  @Override
+  public KBD getKeyboardHandler() {
+    System.out.println("GetKeyboard");
+    return null;
+  }
+
+  @Override
+  public void GL_ResampleTexture(int[] data, int width, int height,
+      int[] scaled, int scaled_width, int scaled_height) {
+    System.out.println("resample texture");
+  }
+
+  @Override
+  public Image GL_LoadNewImage(String name, int type) {
+    System.out.println("LoadImage");
+    return null;
+  }
 }

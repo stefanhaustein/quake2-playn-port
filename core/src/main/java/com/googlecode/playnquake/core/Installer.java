@@ -1,7 +1,6 @@
 package com.googlecode.playnquake.core;
 
 import java.nio.ByteBuffer;
-import java.sql.Savepoint;
 
 import playn.core.Image;
 import playn.core.util.Callback;
@@ -24,6 +23,19 @@ public class Installer {
   ImageConverter pcxConverter = new PCXConverter();
   ImageConverter tgaConverter = new TGAConverter();
   ImageConverter walConverter = new WALConverter();
+  
+  final Callback<Void> readyCallback = new Callback<Void>() {
+    @Override
+    public void onSuccess(Void result) {
+      converted();
+    }
+    @Override
+    public void onFailure(Throwable cause) {
+      error("Error processing files", cause);
+    }
+  };
+  CountingCallback countingCallback = new CountingCallback(readyCallback);
+
   
   Installer(Tools tools, Callback<Void> doneCallback) {
     this.tools = tools;
@@ -78,19 +90,25 @@ public class Installer {
       }
     });
   }
-
   
-  final Callback<Void> readyCallback = new Callback<Void>() {
-    @Override
-    public void onSuccess(Void result) {
-      processed();
-    }
-    @Override
-    public void onFailure(Throwable cause) {
-      error("Error processing files", cause);
-    }
-  };
-  CountingCallback countingCallback = new CountingCallback(readyCallback);
+  void unpacked() {
+    afs.getFile("/models/items/ammo/slugs/medium/skin.pcx.png", 
+        new Callback<ByteBuffer>() {
+          @Override
+          public void onSuccess(ByteBuffer result) {
+            converted();
+          }
+
+          @Override
+          public void onFailure(Throwable cause) {
+            convert();
+          }});
+  }
+  
+  void convert() {
+    afs.processFiles("", processor, countingCallback.addAccess());
+  }
+  
 
   void convert(final Entry file, final ImageConverter converter, final Callback<Void> callback) {
 	 afs.getFile(file.fullPath, 
@@ -138,11 +156,10 @@ public class Installer {
   };
   
   
-  void unpacked() {
-    afs.processFiles("", processor, countingCallback.addAccess());
-  }
+  
 
-  void processed() {
+  void converted() {
     tools.println("All files processed!");
+    doneCallback.onSuccess(null);
   }
 }
