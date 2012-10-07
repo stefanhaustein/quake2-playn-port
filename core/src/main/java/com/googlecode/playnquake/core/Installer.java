@@ -1,8 +1,11 @@
 package com.googlecode.playnquake.core;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import playn.core.Image;
+import playn.core.PlayN;
 import playn.core.util.Callback;
 
 import com.googlecode.playnquake.core.tools.AsyncFilesystem;
@@ -23,10 +26,12 @@ public class Installer {
   ImageConverter pcxConverter = new PCXConverter();
   ImageConverter tgaConverter = new TGAConverter();
   ImageConverter walConverter = new WALConverter();
+  StringBuilder imageSizes;
   
   final Callback<Void> readyCallback = new Callback<Void>() {
     @Override
     public void onSuccess(Void result) {
+      PlayN.storage().setItem("imageSizes", imageSizes.toString());
       converted();
     }
     @Override
@@ -92,20 +97,15 @@ public class Installer {
   }
   
   void unpacked() {
-    afs.getFile("/models/items/ammo/slugs/medium/skin.pcx.png", 
-        new Callback<ByteBuffer>() {
-          @Override
-          public void onSuccess(ByteBuffer result) {
-            converted();
-          }
-
-          @Override
-          public void onFailure(Throwable cause) {
-            convert();
-          }});
+    if (PlayN.storage().getItem("imageSizes") != null) {
+      converted();
+    } else {
+      convert();
+    }
   }
   
   void convert() {
+    imageSizes = new StringBuilder();
     afs.processFiles("", processor, countingCallback.addAccess());
   }
   
@@ -118,6 +118,9 @@ public class Installer {
 	      byte[] data = new byte[result.limit()];
           result.get(data);
           Image image = converter.convert(data);
+          
+          imageSizes.append(file.fullPath + "," + (int) image.width() + "," + (int) image.height() + "\n");
+          
           ByteBuffer png = tools.convertToPng(image);
           afs.saveFile(file.fullPath + ".png", png, 0, png.limit(), callback);
 		}

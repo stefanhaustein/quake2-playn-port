@@ -59,23 +59,24 @@ public class Compatibility {
 	}
 	
 	public static String newString(byte[] b, String encoding) throws UnsupportedEncodingException {
-		return impl.createString(b, encoding);
+		return newString(b);
 	}
 	
 	public static String getOriginatingServerAddress() {
-		return impl.getOriginatingServerAddress();
+	  System.out.println("Compatibility: getOriginatingServerAddress(): 127.0.0.1 Dummy.");
+	  return "127.0.0.1";
 	}
 
 	public static void printStackTrace(Throwable e) {
-		impl.printStackTrace(e);
+		e.printStackTrace();
 	}
 	
 	public void loadClass(String name) throws ClassNotFoundException {
-		impl.loadClass(name);
+		System.out.println("Compatibility.loadClass: " +name);
 	}
 
 	public static void sleep(int i) {
-		impl.sleep(i);		
+	  System.out.println("Compatibility.sleep() dummy " +i);
 	}
 
 	public static String bytesToString(byte[] data, int len) {

@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package com.googlecode.gwtquake.shared.render;
 
+import java.util.Arrays;
+
 import playn.gl11emulation.GL11;
 import playn.gl11emulation.MeshBuilder;
 
@@ -41,6 +43,8 @@ import com.googlecode.gwtquake.shared.game.ConsoleVariable;
 import com.googlecode.gwtquake.shared.sys.KBD;
 import com.googlecode.gwtquake.shared.util.Lib;
 import com.googlecode.gwtquake.shared.util.Vargs;
+import com.googlecode.playnquake.core.KBDImpl;
+import com.googlecode.playnquake.core.PlayNQuake;
 
 /**
  * LWJGLRenderer
@@ -51,7 +55,8 @@ public class GlRenderer implements Renderer {
   int width;
   int height;
 
-  public GlRenderer(int width, int height) {
+  public GlRenderer(GL11 gl, int width, int height) {
+    GlState.gl = gl;
     this.width = width;
     this.height = height;
   }
@@ -801,8 +806,7 @@ public class GlRenderer implements Renderer {
 
   @Override
   public KBD getKeyboardHandler() {
-    System.out.println("GetKeyboard");
-    return null;
+    return new KBDImpl();
   }
 
   @Override
@@ -813,7 +817,7 @@ public class GlRenderer implements Renderer {
 
   @Override
   public Image GL_LoadNewImage(String name, int type) {
-    System.out.println("LoadImage");
+    System.out.println("GlRenderer.GL_LoadNewImage(" + name  + ", " + type + ")" + PlayNQuake.getImageSize(name));
     return null;
   }
 }
