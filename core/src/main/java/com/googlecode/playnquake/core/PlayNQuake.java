@@ -1,9 +1,11 @@
 package com.googlecode.playnquake.core;
 
 import com.googlecode.gwtquake.shared.client.Dimension;
+import com.googlecode.gwtquake.shared.client.Screen;
 import com.googlecode.gwtquake.shared.common.ConsoleVariables;
 import com.googlecode.gwtquake.shared.common.Globals;
 import com.googlecode.gwtquake.shared.common.QuakeCommon;
+import com.googlecode.gwtquake.shared.common.ResourceLoader;
 import com.googlecode.gwtquake.shared.render.GlRenderer;
 import com.googlecode.gwtquake.shared.sound.DummyDriver;
 import com.googlecode.gwtquake.shared.sound.Sound;
@@ -22,7 +24,8 @@ public class PlayNQuake implements Game {
   private static Tools tools;
   private static Map<String,Dimension> imageSizes = new HashMap<String,Dimension>();
   private boolean initialized;
-
+  private double startTime;
+  
   public static Tools tools() {
     return tools;
   }
@@ -65,17 +68,28 @@ public class PlayNQuake implements Game {
    * Game initialization, after resources are loaded / converted.
    */
   void initGame() {
-    loadImageSizes();
     
+    loadImageSizes();
+    Globals.autojoin.value = 0;
     Globals.re = new GlRenderer(
         new GL11Emulation(PlayN.graphics().gl20()),
-        PlayN.graphics().screenWidth(),
-        PlayN.graphics().screenHeight());
+        PlayN.graphics().width(),
+        PlayN.graphics().height());
+    
+    
+ //   Globals.re.GLimp_SetMode(new Dimension(PlayN.graphics().screenWidth(),  PlayN.graphics().screenHeight()), 0, false);
+    
+//    System.out.println("Screen dimension: " + new Dimension(PlayN.graphics().screenWidth(),  PlayN.graphics().screenHeight()));
+    
+    ResourceLoader.impl = new ResourceLoaderImpl();
     
     Sound.impl = new DummyDriver();
     
+    
     QuakeCommon.Init(new String[] { "GQuake" });
     Globals.nostdout = ConsoleVariables.Get("nostdout", "0", 0);
+    
+    startTime = PlayN.platform().time();
     
     initialized = true;
   }
@@ -95,7 +109,7 @@ public class PlayNQuake implements Game {
   
   @Override
   public void update(float delta) {
-   
+    Globals.re.checkPendingImages();
   }
 
   @Override
@@ -103,12 +117,18 @@ public class PlayNQuake implements Game {
     if (!initialized) {
       return;
     }
-    QuakeCommon.Frame((int) alpha);
+    if (ResourceLoader.Pump()) {
+      Screen.UpdateScreen2();
+    } else {
+      double curTime = PlayN.platform().time();
+     // GwtKBD.Frame((int) alpha);
+      QuakeCommon.Frame((int) (curTime - startTime));
+      startTime = curTime;
+    }
   }
 
   @Override
   public int updateRate() {
-    // TODO Auto-generated method stub
     return 0;
   }
 
