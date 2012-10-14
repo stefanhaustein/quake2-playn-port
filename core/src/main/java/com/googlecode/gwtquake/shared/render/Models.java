@@ -40,6 +40,7 @@ import com.googlecode.gwtquake.shared.game.Plane;
 import com.googlecode.gwtquake.shared.util.Lib;
 import com.googlecode.gwtquake.shared.util.Math3D;
 import com.googlecode.gwtquake.shared.util.Vargs;
+import com.googlecode.playnquake.core.PlayNQuake;
 
 
 import java.nio.ByteBuffer;
@@ -1322,8 +1323,8 @@ public class Models  {
 
 			do {
 				// texture coordinates come from the draw list
-				globalModelTextureCoordBuf.put(Compatibility.intBitsToFloat(order[orderIndex + 0]));
-				globalModelTextureCoordBuf.put(Compatibility.intBitsToFloat(order[orderIndex + 1]));
+				globalModelTextureCoordBuf.put(PlayNQuake.tools().intBitsToFloat(order[orderIndex + 0]));
+				globalModelTextureCoordBuf.put(PlayNQuake.tools().intBitsToFloat(order[orderIndex + 1]));
 				globalModelVertexIndexBuf.put((short) order[orderIndex + 2]);
 
 				orderIndex += 3;

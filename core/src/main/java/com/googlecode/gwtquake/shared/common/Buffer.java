@@ -26,6 +26,8 @@ package com.googlecode.gwtquake.shared.common;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
+import com.googlecode.playnquake.core.PlayNQuake;
+
 
 /**
  * sizebuf_t
@@ -61,12 +63,12 @@ public final class Buffer {
 
     //ok.
 	public void putFloat(float f) {
-	    this.putInt(Compatibility.floatToIntBits(f));
+	    this.putInt(PlayNQuake.tools().floatToIntBits(f));
 	}
 
     public float getFloat() {
 	    int n = getInt();
-	    return Compatibility.intBitsToFloat(n);
+	    return PlayNQuake.tools().intBitsToFloat(n);
 	}
 
     public int getInt() {

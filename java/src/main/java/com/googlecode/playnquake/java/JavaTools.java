@@ -39,6 +39,16 @@ public class JavaTools implements Tools {
     System.out.println(text);
   }
 
+  @Override
+  public float intBitsToFloat(int i) {
+    return Float.intBitsToFloat(i);
+  }
+
+  @Override
+  public int floatToIntBits(float f) {
+    return Float.floatToIntBits(f);
+  }
+
 
 
 }

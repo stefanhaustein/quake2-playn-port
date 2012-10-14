@@ -1,16 +1,24 @@
 package com.googlecode.playnquake.java;
 
+import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import playn.core.Image;
 import playn.core.PlayN;
+import playn.core.gl.Scale;
 import playn.core.util.Callback;
+import playn.java.JavaGraphics;
+import playn.java.JavaStaticImage;
 
 import com.googlecode.playnquake.core.tools.AsyncFilesystem;
 
@@ -86,6 +94,15 @@ public class JavaAsyncFilesystem implements AsyncFilesystem{
     }
     
     
+  }
+
+  @Override
+  public Image getImage(String name) {
+    try {
+      return new JavaStaticImage(PlayN.graphics().ctx(), ImageIO.read(new File(root, name)), Scale.ONE);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }

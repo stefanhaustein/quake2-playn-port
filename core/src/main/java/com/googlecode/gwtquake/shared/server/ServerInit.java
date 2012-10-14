@@ -134,7 +134,7 @@ public class ServerInit {
         }
 
         catch (Exception e) {
-        	Compatibility.printStackTrace(e);
+     //   	Compatibility.printStackTrace(e);
             return;
         }
 

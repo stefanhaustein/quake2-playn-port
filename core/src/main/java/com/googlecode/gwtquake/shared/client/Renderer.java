@@ -121,4 +121,5 @@ public interface Renderer {
   
   public DisplayMode getDisplayMode();
 
+  void checkPendingImages();
 }

@@ -45,16 +45,16 @@ public class Image {
 	public boolean paletted;
 	public boolean complete;
 	
+	public playn.core.Image playNImage;
+	
 	public Image(int id) {
 		this.id = id;
 	}
 
     public void setData(byte[] pic, int width, int height, int bits) {
-        width = width;
-        height = height;
+        this.width = width;
+        this.height = height;
         complete = true;
-
-        int i;
 
         if (type == QuakeImage.it_skin && bits == 8) {
             Images.R_FloodFillSkin(pic, width, height);

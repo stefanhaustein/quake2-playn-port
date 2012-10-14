@@ -26,25 +26,6 @@ package com.googlecode.gwtquake.shared.common;
 import java.io.UnsupportedEncodingException;
 
 public class Compatibility {
-	public interface Impl {
-		int floatToIntBits(float f);
-		float intBitsToFloat(int i);
-		String getOriginatingServerAddress();
-		void printStackTrace(Throwable e);
-		void loadClass(String name) throws ClassNotFoundException;
-		String createString(byte[] b, String encoding);
-		void sleep(int i);
-	}
-	
-	public static Impl impl;
-	
-	public static int floatToIntBits(float f) {
-		return impl.floatToIntBits(f);
-	}
-	
-	public static float intBitsToFloat(int i) {
-		return impl.intBitsToFloat(i);
-	}
 
 	public static String newString(byte[] b) {
 		return newString(b, 0, b.length);
@@ -76,7 +57,7 @@ public class Compatibility {
 	}
 
 	public static void sleep(int i) {
-	  System.out.println("Compatibility.sleep() dummy " +i);
+	 // System.out.println("Compatibility.sleep() dummy " +i);
 	}
 
 	public static String bytesToString(byte[] data, int len) {

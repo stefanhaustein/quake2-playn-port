@@ -239,4 +239,10 @@ public class DummyRenderer implements Renderer {
     return null;
   }
 
+  @Override
+  public void checkPendingImages() {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

@@ -43,7 +43,7 @@ public class ResourceLoaderImpl implements ResourceLoader.Impl {
     
     System.out.println("Requesting resource: " + path);
     
-    PlayNQuake.tools().getFileSystem().getFile("baseq2/" + path, new Callback<ByteBuffer>() {
+    PlayNQuake.tools().getFileSystem().getFile(path, new Callback<ByteBuffer>() {
 
       @Override
       public void onSuccess(ByteBuffer result) {

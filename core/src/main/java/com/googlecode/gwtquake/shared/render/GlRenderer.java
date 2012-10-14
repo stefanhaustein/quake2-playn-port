@@ -23,9 +23,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package com.googlecode.gwtquake.shared.render;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
+import playn.core.PlayN;
+import playn.core.gl.GL20;
 import playn.gl11emulation.GL11;
+import playn.gl11emulation.GLDebug;
 import playn.gl11emulation.MeshBuilder;
 
 import com.googlecode.gwtquake.shared.client.Dimension;
@@ -54,11 +58,14 @@ import com.googlecode.playnquake.core.PlayNQuake;
 public class GlRenderer implements Renderer {
   int width;
   int height;
+  List<Image> pendingImages = new ArrayList<Image>();
 
   public GlRenderer(GL11 gl, int width, int height) {
     GlState.gl = gl;
     this.width = width;
     this.height = height;
+    
+    init();
   }
 
   public DisplayMode[] getAvailableDisplayModes() {
@@ -288,7 +295,7 @@ public class GlRenderer implements Renderer {
    * @see com.googlecode.gwtquake.shared.client.Renderer#EndFrame()
    */
   public final void EndFrame() {
-    GlState.gl.glFinish(); //swapBuffers();
+    GlState.gl.glFlush(); //swapBuffers();
     // swap buffers
   }
 
@@ -812,12 +819,97 @@ public class GlRenderer implements Renderer {
   @Override
   public void GL_ResampleTexture(int[] data, int width, int height,
       int[] scaled, int scaled_width, int scaled_height) {
-    System.out.println("resample texture");
+    throw new RuntimeException("NYI resample texture");
   }
 
+  public void checkPendingImages() {
+    for (int i = pendingImages.size() - 1; i >= 0; i--) {
+      Image image = pendingImages.get(i);
+      if (image.playNImage.isReady()) {
+        System.out.println("Image ready: " + image);
+        uploadImage(image);
+        pendingImages.remove(i);
+      }
+    }
+  }
+  
+  public void uploadImage(Image image) {
+    image.has_alpha = true;
+    image.complete = true;
+//    image.height = (int) image.playNImage.height();
+//    image.width = (int) image.playNImage.width();
+    
+    boolean mipMap = image.type != com.googlecode.gwtquake.shared.common.QuakeImage.it_pic && 
+        image.type != com.googlecode.gwtquake.shared.common.QuakeImage.it_sky;
+    
+    Images.GL_Bind(image.texnum);
+
+    int p2w = 1 << ((int) Math.ceil(Math.log(image.width) / Math.log(2))); 
+    int p2h = 1 << ((int) Math.ceil(Math.log(image.height) / Math.log(2))); 
+
+//    if (mipMap) {
+//        p2w = p2h = Math.max(p2w, p2h);
+//    }
+    
+    image.upload_width = p2w;
+    image.upload_height = p2h;
+
+    int level = 0;
+    do {
+      playn.core.CanvasImage canvasImage = PlayN.graphics().createImage(p2w, p2h);
+      playn.core.Canvas canvas = canvasImage.canvas();
+      
+//      canvas1.getContext2D().clearRect(0, 0, p2w, p2h);
+      canvas.drawImage(image.playNImage, 0, 0, p2w, p2h);
+      canvasImage.glTexImage2D(PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, level++, GL20.GL_RGBA, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+
+        p2w = p2w / 2;
+        p2h = p2h / 2;
+    }
+    while(mipMap && p2w > 0 && p2h > 0);
+    
+    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, 
+            mipMap ? GL11.GL_LINEAR_MIPMAP_NEAREST : GL11.GL_LINEAR);
+    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+    
+    GLDebug.checkError(GlState.gl, "uploadImage");
+    
+  }
+  
+  
   @Override
   public Image GL_LoadNewImage(String name, int type) {
     System.out.println("GlRenderer.GL_LoadNewImage(" + name  + ", " + type + ")" + PlayNQuake.getImageSize(name));
-    return null;
+    
+    final Image image = Images.GL_Find_free_image_t(name, type);
+
+ //   int cut = name.lastIndexOf('.');
+//    String normalizedName = cut == -1 ? name : name.substring(0, cut);
+    Dimension d = PlayNQuake.getImageSize(name);
+    if (d == null) {
+      name = "Install/Data/baseq2/" + name;
+    }
+    d = PlayNQuake.getImageSize(name);
+    if (d == null) {
+        System.err.println("Size not found for " + name);
+        image.width = 128;
+        image.height = 128;
+    } else {
+        image.width = d.width;
+        image.height = d.height;
+    }
+    
+    image.playNImage = PlayNQuake.tools().getFileSystem().getImage(name + ".png");
+    pendingImages.add(image);
+    
+//    if (type != com.googlecode.gwtquake.shared.common.QuakeImage.it_pic) {
+//        GlState.gl.glTexImage2D(TEXTURE_2D, 0, RGBA, HOLODECK_TEXTURE_SIZE, HOLODECK_TEXTURE_SIZE, 0, RGBA, 
+//            UNSIGNED_BYTE, holoDeckTexture);
+//        GlState.gl.glTexParameterf(TEXTURE_2D, TEXTURE_MIN_FILTER, LINEAR);
+//        GlState.gl.glTexParameterf(TEXTURE_2D, TEXTURE_MAG_FILTER, LINEAR);
+//    }
+
+    
+    return image;
   }
 }
