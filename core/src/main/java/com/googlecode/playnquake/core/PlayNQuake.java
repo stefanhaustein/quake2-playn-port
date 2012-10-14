@@ -82,8 +82,7 @@ public class PlayNQuake implements Game {
 //    System.out.println("Screen dimension: " + new Dimension(PlayN.graphics().screenWidth(),  PlayN.graphics().screenHeight()));
     
     ResourceLoader.impl = new ResourceLoaderImpl();
-    
-    Sound.impl = new DummyDriver();
+    Sound.impl = new PlayNSoundImpl();
     
     
     QuakeCommon.Init(new String[] { "GQuake" });

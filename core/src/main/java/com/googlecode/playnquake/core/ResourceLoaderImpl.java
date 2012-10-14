@@ -54,7 +54,7 @@ public class ResourceLoaderImpl implements ResourceLoader.Impl {
       @Override
       public void onFailure(Throwable cause) {
         missing--;
-        System.err.println("Error: " + cause);
+        System.err.println("ResourceLoader.onFailure: " + cause);
       }});
     
   }

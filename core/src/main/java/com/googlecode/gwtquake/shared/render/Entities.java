@@ -23,25 +23,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package com.googlecode.gwtquake.shared.render;
 
-import static com.googlecode.gwtquake.shared.common.Constants.CVAR_ARCHIVE;
-import static com.googlecode.gwtquake.shared.common.Constants.CVAR_USERINFO;
 import playn.gl11emulation.GL11;
 import playn.gl11emulation.MeshBuilder;
 
 
 
-import com.googlecode.gwtquake.shared.client.Dimension;
 import com.googlecode.gwtquake.shared.client.EntityType;
 import com.googlecode.gwtquake.shared.client.RendererState;
 import com.googlecode.gwtquake.shared.client.Window;
 import com.googlecode.gwtquake.shared.common.Com;
-import com.googlecode.gwtquake.shared.common.ConsoleVariables;
 import com.googlecode.gwtquake.shared.common.Constants;
-import com.googlecode.gwtquake.shared.common.ExecutableCommand;
 import com.googlecode.gwtquake.shared.common.QuakeFiles;
 import com.googlecode.gwtquake.shared.common.QuakeImage;
-import com.googlecode.gwtquake.shared.game.Commands;
-import com.googlecode.gwtquake.shared.game.ConsoleVariable;
 import com.googlecode.gwtquake.shared.game.Plane;
 import com.googlecode.gwtquake.shared.util.Math3D;
 import com.googlecode.gwtquake.shared.util.Vargs;
@@ -429,8 +422,8 @@ public class Entities {
 		double xmin = ymin * aspect;
 		double xmax = ymax * aspect;
 
-		xmin += - (2 * GlConfig.gl_state.camera_separation) / zNear;
-		xmax += - (2 * GlConfig.gl_state.camera_separation) / zNear;
+		xmin += - (2 * GlState.camera_separation) / zNear;
+		xmax += - (2 * GlState.camera_separation) / zNear;
 
 		GlState.gl.glFrustumf((float) xmin, (float) xmax, (float) ymin, (float) ymax, (float) zNear, (float) zFar);
 	}

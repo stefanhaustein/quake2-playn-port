@@ -23,14 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package com.googlecode.gwtquake.shared.render;
 
-
-
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import com.googlecode.gwtquake.shared.client.Dimension;
-import com.googlecode.gwtquake.shared.client.Window;
-import com.googlecode.gwtquake.shared.common.Com;
 import com.googlecode.gwtquake.shared.common.Constants;
 import com.googlecode.gwtquake.shared.common.QuakeImage;
 import com.googlecode.gwtquake.shared.util.Lib;

@@ -108,7 +108,7 @@ public class Channel {
 	    // create channels
 		int sourceId;
 		for (int i = 0; i < MAX_CHANNELS; i++) {
-			
+			tmp.position(0);
 			ALAdapter.impl.alGenSources(tmp);
 			sourceId = tmp.get(0);
 			

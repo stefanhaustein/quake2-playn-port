@@ -1,6 +1,7 @@
 package com.googlecode.playnquake.java;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,8 +16,10 @@ import javax.imageio.ImageIO;
 
 import playn.core.Image;
 import playn.core.PlayN;
+import playn.core.Sound;
 import playn.core.gl.Scale;
 import playn.core.util.Callback;
+import playn.java.JavaAudio;
 import playn.java.JavaGraphics;
 import playn.java.JavaStaticImage;
 
@@ -101,7 +104,21 @@ public class JavaAsyncFilesystem implements AsyncFilesystem{
     try {
       return new JavaStaticImage(PlayN.graphics().ctx(), ImageIO.read(new File(root, name)), Scale.ONE);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      return PlayN.assets().getImage("not_existing");
+    }
+  }
+
+  @Override
+  public Sound getSound(String location) {
+    try {
+      File soundFile = new File(root, location);
+      byte[] soundData = new byte[(int) soundFile.length()];
+      new DataInputStream(new FileInputStream(soundFile)).readFully(soundData);
+      return ((JavaAudio) PlayN.platform().audio()).createSound(location, new ByteArrayInputStream(soundData));
+    } catch (Exception e) {
+      PlayN.platform().log().warn("Sound load error " + location + ": " + e);
+      e.printStackTrace();
+      return new Sound.Error(e);
     }
   }
 

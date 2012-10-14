@@ -736,7 +736,7 @@ public class ClientParser {
                 }
                 String msgText = Buffers.getString(Globals.net_message);
                 Com.Printf(msgText);
-                WebIntegration.onNetMessage(msgText);
+                System.out.println("WebIntegration.onNetMessage(msgText);");
                 Globals.con.ormask = 0;
                 break;
 

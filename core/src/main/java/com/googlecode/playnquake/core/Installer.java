@@ -155,6 +155,7 @@ public class Installer {
     @Override
     public void onFailure(Throwable cause) {
       tools.println("Error: " + cause);
+      cause.printStackTrace();
     }
   };
   

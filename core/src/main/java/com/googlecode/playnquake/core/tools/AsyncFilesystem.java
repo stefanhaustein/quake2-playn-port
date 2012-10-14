@@ -3,6 +3,7 @@ package com.googlecode.playnquake.core.tools;
 import java.nio.ByteBuffer;
 
 import playn.core.Image;
+import playn.core.Sound;
 import playn.core.util.Callback;
 
 /**
@@ -25,4 +26,6 @@ public interface AsyncFilesystem {
   void processFiles(String dirName, Callback<Entry> processCallback, Callback<Void> readyCallback);
 
   Image getImage(String name);
+
+  Sound getSound(String location);
 }

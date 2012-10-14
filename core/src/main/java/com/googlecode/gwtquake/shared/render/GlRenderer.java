@@ -24,8 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package com.googlecode.gwtquake.shared.render;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import playn.core.CanvasImage;
 import playn.core.PlayN;
 import playn.core.gl.GL20;
 import playn.gl11emulation.GL11;
@@ -833,11 +836,22 @@ public class GlRenderer implements Renderer {
     }
   }
   
+  
+  private Map<String,CanvasImage> tmpImages = new HashMap<String,CanvasImage>();
+  private CanvasImage getTmpImage(int w, int h) {
+    String name = w + "x" + h;
+    CanvasImage image = tmpImages.get(name);
+    if (image == null) {
+      image = PlayN.graphics().createImage(w, h);
+      tmpImages.put(name, image);
+    }
+    return image;
+  }
+  
+  
   public void uploadImage(Image image) {
     image.has_alpha = true;
     image.complete = true;
-//    image.height = (int) image.playNImage.height();
-//    image.width = (int) image.playNImage.width();
     
     boolean mipMap = image.type != com.googlecode.gwtquake.shared.common.QuakeImage.it_pic && 
         image.type != com.googlecode.gwtquake.shared.common.QuakeImage.it_sky;
@@ -847,19 +861,18 @@ public class GlRenderer implements Renderer {
     int p2w = 1 << ((int) Math.ceil(Math.log(image.width) / Math.log(2))); 
     int p2h = 1 << ((int) Math.ceil(Math.log(image.height) / Math.log(2))); 
 
-//    if (mipMap) {
-//        p2w = p2h = Math.max(p2w, p2h);
-//    }
+    if (mipMap) {
+        p2w = p2h = Math.max(p2w, p2h);
+    }
     
     image.upload_width = p2w;
     image.upload_height = p2h;
 
     int level = 0;
     do {
-      playn.core.CanvasImage canvasImage = PlayN.graphics().createImage(p2w, p2h);
+      playn.core.CanvasImage canvasImage = getTmpImage(p2w, p2h);
       playn.core.Canvas canvas = canvasImage.canvas();
-      
-//      canvas1.getContext2D().clearRect(0, 0, p2w, p2h);
+      canvas.clear();
       canvas.drawImage(image.playNImage, 0, 0, p2w, p2h);
       canvasImage.glTexImage2D(PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, level++, GL20.GL_RGBA, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
 
@@ -873,15 +886,15 @@ public class GlRenderer implements Renderer {
     GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
     
     GLDebug.checkError(GlState.gl, "uploadImage");
-    
   }
   
   
   @Override
   public Image GL_LoadNewImage(String name, int type) {
     System.out.println("GlRenderer.GL_LoadNewImage(" + name  + ", " + type + ")" + PlayNQuake.getImageSize(name));
-    
     final Image image = Images.GL_Find_free_image_t(name, type);
+
+    name = name.toLowerCase();
 
  //   int cut = name.lastIndexOf('.');
 //    String normalizedName = cut == -1 ? name : name.substring(0, cut);

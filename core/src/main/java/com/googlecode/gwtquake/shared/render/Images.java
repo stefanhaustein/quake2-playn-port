@@ -49,8 +49,6 @@ import com.googlecode.gwtquake.shared.util.Vargs;
  */
 public abstract class Images {
 
-    static int waitingForImages = 0;
-    
     static Image draw_chars;
  
     static Image[] gltextures = new Image[GlConstants.MAX_GLTEXTURES];
