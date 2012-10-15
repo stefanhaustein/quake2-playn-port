@@ -24,6 +24,7 @@
 package com.googlecode.playnquake.core.common;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 public class Compatibility {
 
@@ -93,5 +94,17 @@ public class Compatibility {
     	     Character.digit(hex.charAt(i + 1), 16));
     	}
     	return len / 2;
+    }
+    
+    
+    public static ByteBuffer wrap(byte[] array) {
+      return wrap(array, 0, array.length);
+    }
+    
+    public static ByteBuffer wrap(byte[] array, int start, int len) {
+      ByteBuffer buf = ByteBuffer.allocate(len);
+      buf.put(array, start, len);
+      buf.position(0);
+      return buf;
     }
 }

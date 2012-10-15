@@ -29,6 +29,7 @@
 
   <source path='core'/>
   <source path='html'/>
+  <super-source path='emul'/>
 
   <public path="resources" />
 
