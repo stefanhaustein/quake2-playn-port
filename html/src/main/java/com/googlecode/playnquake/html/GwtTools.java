@@ -36,4 +36,9 @@ public class GwtTools implements Tools {
     throw new RuntimeException("NYI");
   }
 
+  @Override
+  public void exit(int i) {
+    println("exit(" + i + ") requested.");
+  }
+
 }

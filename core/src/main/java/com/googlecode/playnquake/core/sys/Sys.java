@@ -29,6 +29,9 @@ import java.io.FilenameFilter;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import playn.core.PlayN;
+
+import com.googlecode.playnquake.core.PlayNQuake;
 import com.googlecode.playnquake.core.client.Client;
 import com.googlecode.playnquake.core.common.Com;
 import com.googlecode.playnquake.core.common.Constants;
@@ -44,13 +47,14 @@ public final class Sys extends Constants {
         Client.shutdown();
         //StackTrace();
         new Exception(error).printStackTrace();
-        System.exit(1);
+        
+        PlayNQuake.tools().exit(1);
     }
 
     public static void Quit() {
         Client.shutdown();
 
-        System.exit(0);
+        PlayNQuake.tools().exit(1);
     }
 
     //ok!

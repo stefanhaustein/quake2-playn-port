@@ -40,8 +40,8 @@ import com.googlecode.playnquake.core.util.Vargs;
  */
 public final class QuakeCommon {
 
-	public static final String BUILDSTRING = "Java " + System.getProperty("java.version");;
-	public static final String CPUSTRING = System.getProperty("os.arch");
+	public static final String BUILDSTRING = "PlayN"; // Java + System.getProperty("java.version");;
+	public static final String CPUSTRING = "Unknown"; //System.getProperty("os.arch");
 	public static QuakeDialog q2Dialog;
 
 	/**

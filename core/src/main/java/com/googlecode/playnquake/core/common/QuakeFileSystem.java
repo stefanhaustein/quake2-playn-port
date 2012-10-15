@@ -895,7 +895,8 @@ public final class QuakeFileSystem {
             }
         });
 
-        fs_userdir = System.getProperty("user.home") + "/.jake2";
+        fs_userdir = //System.getProperty("user.home") + 
+            ".jake2";
         QuakeFileSystem.CreatePath(fs_userdir + "/");
         QuakeFileSystem.AddGameDirectory(fs_userdir);
 

@@ -49,6 +49,11 @@ public class JavaTools implements Tools {
     return Float.floatToIntBits(f);
   }
 
+  @Override
+  public void exit(int i) {
+    System.exit(i);
+  }
+
 
 
 }
