@@ -9,9 +9,11 @@ import com.googlecode.playnquake.core.tools.Tools;
 
 public class GwtTools implements Tools {
 
+  GwtFilesystem filesystem = new GwtFilesystem();
+  
   @Override
   public AsyncFilesystem getFileSystem() {
-    throw new RuntimeException("NYI");
+    return filesystem;
   }
 
   @Override

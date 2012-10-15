@@ -42,14 +42,14 @@ function onInitFs(fileSystem) {
   println("File system initialized. Checking contents.")
   window.quakeFileSystem = fileSystem;
 
-//  window.quakeFileSystem.root.getFile("Splash/wav/btnx.wav", {},
-//    function() {
-//      println("Files downloaded and unpacked already.");
-//    },
-//    function() {
+  window.quakeFileSystem.root.getFile("Splash/wav/btnx.wav", {},
+    function() {
+      println("Files downloaded and unpacked already.");
+    },
+    function() {
       downloadAndUnpack();
-//    }
-//  );
+    }
+  );
 }
 
 function downloadAndUnpack() {

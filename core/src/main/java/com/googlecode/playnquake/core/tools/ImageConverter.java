@@ -18,10 +18,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package com.googlecode.playnquake.core.tools;
 
+import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.PlayN;
 
-import com.googlecode.gwtquake.shared.common.QuakeImage;
+import com.googlecode.playnquake.core.common.QuakeImage;
 
 public abstract class ImageConverter {
 
@@ -44,7 +45,7 @@ public abstract class ImageConverter {
   public abstract Image convert(byte[] raw);
 
   static Image makeImage(image_t source) {
-	Image image = PlayN.graphics().createImage(source.width, source.height);
+	CanvasImage image = PlayN.graphics().createImage(source.width, source.height);
 	
 	int[] rgba = new int[source.pix.length / 4];
 	int ofs = 0;
@@ -59,7 +60,7 @@ public abstract class ImageConverter {
   }
 
   static Image makePalletizedImage(image_t source) {
-    Image image = PlayN.graphics().createImage(source.width, source.height);
+    CanvasImage image = PlayN.graphics().createImage(source.width, source.height);
 
     int[] data = new int[source.width * source.height];
     int i = 0;

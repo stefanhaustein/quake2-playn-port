@@ -5,16 +5,36 @@ import java.nio.ByteBuffer;
 import playn.core.Image;
 import playn.core.Sound;
 import playn.core.util.Callback;
+import playn.html.TypedArrayHelper;
 
+import com.google.gwt.typedarrays.client.ArrayBuffer;
 import com.googlecode.playnquake.core.tools.AsyncFilesystem;
 
 public class GwtFilesystem implements AsyncFilesystem{
-
+  
+  
   @Override
-  public void getFile(String filename, Callback<ByteBuffer> callback) {
-    throw new RuntimeException("NYI");
+  public void getFile(final String filename, final Callback<ByteBuffer> callback) {
+    getFileImpl(filename, new Callback<ArrayBuffer>() {
+      @Override
+      public void onSuccess(ArrayBuffer result) {
+        callback.onSuccess(TypedArrayHelper.wrap(result));
+      }
+
+      @Override
+      public void onFailure(Throwable cause) {
+        callback.onFailure(new RuntimeException());
+      }
+      
+    });
+   
   }
 
+  public native void getFileImpl(String filename, Callback<ArrayBuffer> callback) /*-{
+    
+  }-*/;
+  
+  
   @Override
   public void saveFile(String filename, ByteBuffer data, int offet, int len,
       Callback<Void> callback) {
@@ -34,8 +54,7 @@ public class GwtFilesystem implements AsyncFilesystem{
 
   @Override
   public Sound getSound(String location) {
-    // TODO Auto-generated method stub
-    return null;
+    throw new RuntimeException("NYI");
   }
 
 }

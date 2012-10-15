@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 import playn.core.util.Callback;
 
 
-import com.googlecode.gwtquake.shared.common.ResourceLoader;
+import com.googlecode.playnquake.core.common.ResourceLoader;
 
 public class ResourceLoaderImpl implements ResourceLoader.Impl {
 

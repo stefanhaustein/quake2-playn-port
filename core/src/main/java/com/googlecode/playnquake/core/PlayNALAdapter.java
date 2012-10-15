@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package com.googlecode.playnquake.core;
 
-import com.googlecode.gwtquake.shared.sound.ALAdapter;
+import com.googlecode.playnquake.core.sound.ALAdapter;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -129,8 +129,8 @@ public class PlayNALAdapter extends ALAdapter {
 
   @Override
   public void alDeleteBuffers(IntBuffer buffers) {
-    for (int bid : buffers.array()) {
-      bufferData.remove(bid);
+    for (int i = buffers.position(); i < buffers.limit(); i++) {
+      bufferData.remove(buffers.get(i));
     }
   }
 

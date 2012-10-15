@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 
 import playn.core.Image;
 
-import com.googlecode.gwtquake.shared.common.QuakeFiles;
+import com.googlecode.playnquake.core.common.QuakeFiles;
 
 public class TGAConverter extends ImageConverter {
 

@@ -1,14 +1,14 @@
 package com.googlecode.playnquake.core;
 
-import com.googlecode.gwtquake.shared.client.Dimension;
-import com.googlecode.gwtquake.shared.client.Screen;
-import com.googlecode.gwtquake.shared.common.ConsoleVariables;
-import com.googlecode.gwtquake.shared.common.Globals;
-import com.googlecode.gwtquake.shared.common.QuakeCommon;
-import com.googlecode.gwtquake.shared.common.ResourceLoader;
-import com.googlecode.gwtquake.shared.render.GlRenderer;
-import com.googlecode.gwtquake.shared.sound.DummyDriver;
-import com.googlecode.gwtquake.shared.sound.Sound;
+import com.googlecode.playnquake.core.client.Dimension;
+import com.googlecode.playnquake.core.client.Screen;
+import com.googlecode.playnquake.core.common.ConsoleVariables;
+import com.googlecode.playnquake.core.common.Globals;
+import com.googlecode.playnquake.core.common.QuakeCommon;
+import com.googlecode.playnquake.core.common.ResourceLoader;
+import com.googlecode.playnquake.core.render.GlRenderer;
+import com.googlecode.playnquake.core.sound.DummyDriver;
+import com.googlecode.playnquake.core.sound.Sound;
 import com.googlecode.playnquake.core.tools.Tools;
 
 import java.util.HashMap;

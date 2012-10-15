@@ -18,23 +18,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package com.googlecode.playnquake.core;
 
-import com.googlecode.gwtquake.shared.client.Console;
-import com.googlecode.gwtquake.shared.common.Com;
-import com.googlecode.gwtquake.shared.common.ConsoleVariables;
-import com.googlecode.gwtquake.shared.common.Constants;
-import com.googlecode.gwtquake.shared.common.ExecutableCommand;
-import com.googlecode.gwtquake.shared.common.Globals;
-import com.googlecode.gwtquake.shared.game.Commands;
-import com.googlecode.gwtquake.shared.game.ConsoleVariable;
-import com.googlecode.gwtquake.shared.game.EntityState;
-import com.googlecode.gwtquake.shared.sound.ALAdapter;
-import com.googlecode.gwtquake.shared.sound.Channel;
-import com.googlecode.gwtquake.shared.sound.PlaySound;
-import com.googlecode.gwtquake.shared.sound.Sfx;
-import com.googlecode.gwtquake.shared.sound.SfxCache;
-import com.googlecode.gwtquake.shared.sound.SoundImpl;
-import com.googlecode.gwtquake.shared.util.Lib;
-import com.googlecode.gwtquake.shared.util.Vargs;
+import com.googlecode.playnquake.core.client.Console;
+import com.googlecode.playnquake.core.common.Com;
+import com.googlecode.playnquake.core.common.ConsoleVariables;
+import com.googlecode.playnquake.core.common.Constants;
+import com.googlecode.playnquake.core.common.ExecutableCommand;
+import com.googlecode.playnquake.core.common.Globals;
+import com.googlecode.playnquake.core.game.Commands;
+import com.googlecode.playnquake.core.game.ConsoleVariable;
+import com.googlecode.playnquake.core.game.EntityState;
+import com.googlecode.playnquake.core.sound.ALAdapter;
+import com.googlecode.playnquake.core.sound.Channel;
+import com.googlecode.playnquake.core.sound.PlaySound;
+import com.googlecode.playnquake.core.sound.Sfx;
+import com.googlecode.playnquake.core.sound.SfxCache;
+import com.googlecode.playnquake.core.sound.SoundImpl;
+import com.googlecode.playnquake.core.util.Lib;
+import com.googlecode.playnquake.core.util.Vargs;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -43,7 +43,7 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 
-import static com.googlecode.gwtquake.shared.common.Constants.CS_PLAYERSKINS;
+import static com.googlecode.playnquake.core.common.Constants.CS_PLAYERSKINS;
 
 public class PlayNSoundImpl implements SoundImpl {
 
@@ -640,12 +640,12 @@ public class PlayNSoundImpl implements SoundImpl {
 
   private void initOpenAL() throws Exception {
     ALAdapter.impl.create();
-    String deviceName = null;
+//    String deviceName = null;
 
-    String os = System.getProperty("os.name");
-    if (os.startsWith("Windows")) {
-      deviceName = "DirectSound3D";
-    }
+//    String os = System.getProperty("os.name");
+//    if (os.startsWith("Windows")) {
+//      deviceName = "DirectSound3D";
+//    }
 
 // TODO(jgw)
 //		String deviceSpecifier = ALC.alcGetString(ALC.ALC_DEVICE_SPECIFIER);

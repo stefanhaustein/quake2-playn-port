@@ -25,9 +25,9 @@ import playn.core.Mouse.ButtonEvent;
 import playn.core.Mouse.MotionEvent;
 import playn.core.Mouse.WheelEvent;
 
-import com.googlecode.gwtquake.shared.client.Keys;
-import com.googlecode.gwtquake.shared.sys.KBD;
-import com.googlecode.gwtquake.shared.sys.Timer;
+import com.googlecode.playnquake.core.client.Keys;
+import com.googlecode.playnquake.core.sys.KBD;
+import com.googlecode.playnquake.core.sys.Timer;
 
 
 public class KBDImpl extends KBD {
@@ -196,7 +196,7 @@ public class KBDImpl extends KBD {
 
   @Override
   public void Do_Key_Event(int key, boolean down) {
-    com.googlecode.gwtquake.shared.client.Key.Event(
+    com.googlecode.playnquake.core.client.Key.Event(
         key, down, Timer.Milliseconds());
   }
 

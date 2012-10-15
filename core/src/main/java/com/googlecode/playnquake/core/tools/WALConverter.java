@@ -21,7 +21,7 @@ package com.googlecode.playnquake.core.tools;
 
 import playn.core.Image;
 
-import com.googlecode.gwtquake.shared.common.QuakeFiles;
+import com.googlecode.playnquake.core.common.QuakeFiles;
 
 public class WALConverter extends ImageConverter {
 
