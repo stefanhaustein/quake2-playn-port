@@ -108,14 +108,14 @@ public class Models  {
 
 
 	static byte[] decompressed = new byte[Constants.MAX_MAP_LEAFS / 8];
-	static byte[] model_visibility = new byte[Constants.MAX_MAP_VISIBILITY]; 
+	static ByteBuffer model_visibility = ByteBuffer.allocate(Constants.MAX_MAP_VISIBILITY); 
 
 	/*
 	===================
 	Mod_DecompressVis
 	===================
 	*/
-	static byte[] Mod_DecompressVis(byte[] in, int offset, Model model)
+	static byte[] Mod_DecompressVis(ByteBuffer in, int offset, Model model)
 	{
 		int c;
 		byte[] out;
@@ -139,13 +139,13 @@ public class Models  {
 
 		do
 		{
-			if (in[inp] != 0)
+			if (in.get(inp) != 0)
 			{
-				out[outp++] = in[inp++];
+				out[outp++] = in.get(inp++);
 				continue;
 			}
 	
-			c = in[inp + 1] & 0xFF;
+			c = in.get(inp + 1) & 0xFF;
 			inp += 2;
 			while (c != 0)
 			{
@@ -361,10 +361,12 @@ public class Models  {
 			return;
 		}
 		// memcpy (loadmodel.lightdata, mod_base + l.fileofs, l.filelen);
-		loadmodel.lightdata = new byte[l.filelen];
+//		loadmodel.lightdata = new byte[l.filelen];
 //		System.arraycopy(mod_base, l.fileofs, loadmodel.lightdata, 0, l.filelen);
 		mod_base.position(l.fileofs);
-		mod_base.get(loadmodel.lightdata, 0, l.filelen);
+//		mod_base.get(loadmodel.lightdata, 0, l.filelen);
+		
+		loadmodel.lightdata = Compatibility.copyPartialBuffer(mod_base, l.filelen);
 	}
 
 
@@ -385,9 +387,10 @@ public class Models  {
 		
 //		System.arraycopy(mod_base, l.fileofs, model_visibility, 0, l.filelen);
     mod_base.position(l.fileofs);
-		mod_base.get(model_visibility, 0, l.filelen);
+        Compatibility.copyPartialBuffer(mod_base, l.filelen, model_visibility); 
+//		mod_base.get(model_visibility, 0, l.filelen);
 		
-		ByteBuffer bb = ByteBuffer.wrap(model_visibility, 0, l.filelen);
+		ByteBuffer bb = model_visibility.slice();
 		
 		loadmodel.vis = new QuakeFiles.dvis_t(bb.order(ByteOrder.LITTLE_ENDIAN));
 		
@@ -651,7 +654,7 @@ public class Models  {
 	        if (i == -1)
 	            out.samples = null;
 	        else {
-	            ByteBuffer pointer = ByteBuffer.wrap(loadmodel.lightdata);
+	            ByteBuffer pointer = loadmodel.lightdata.slice();
 	            pointer.position(i);
 	            pointer = pointer.slice();
 	            pointer.mark();

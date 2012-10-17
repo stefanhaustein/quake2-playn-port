@@ -26,6 +26,8 @@ package com.googlecode.playnquake.core.common;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
+import com.googlecode.playnquake.core.render.Model;
+
 public class Compatibility {
 
 	public static String newString(byte[] b) {
@@ -96,15 +98,18 @@ public class Compatibility {
     	return len / 2;
     }
     
-    
-    public static ByteBuffer wrap(byte[] array) {
-      return wrap(array, 0, array.length);
+
+    public static void copyPartialBuffer(ByteBuffer original, int len, ByteBuffer copy) {
+      int limit = original.limit();
+      original.limit(original.position() + len);
+      copy.put(original);
+      copy.position(0);
+      original.limit(limit);
     }
-    
-    public static ByteBuffer wrap(byte[] array, int start, int len) {
-      ByteBuffer buf = ByteBuffer.allocate(len);
-      buf.put(array, start, len);
-      buf.position(0);
-      return buf;
+
+    public static ByteBuffer copyPartialBuffer(ByteBuffer original, int len) {
+      ByteBuffer copy = ByteBuffer.allocate(len);
+      copyPartialBuffer(original, len, copy);
+      return copy;
     }
 }

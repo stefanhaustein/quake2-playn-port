@@ -25,6 +25,7 @@ package com.googlecode.playnquake.core.render;
 
 
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import playn.gl11emulation.GL11;
@@ -99,7 +100,7 @@ public class Model implements Cloneable {
 
 	public QuakeFiles.dvis_t vis;
 
-	public byte lightdata[];
+	public ByteBuffer lightdata;
 
 	// for alias models and skins
 	// was image_t *skins[]; (array of pointers)
