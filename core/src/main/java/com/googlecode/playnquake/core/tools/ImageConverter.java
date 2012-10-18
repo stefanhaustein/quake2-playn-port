@@ -18,6 +18,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package com.googlecode.playnquake.core.tools;
 
+import java.nio.ByteBuffer;
+
 import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.PlayN;
@@ -42,7 +44,7 @@ public abstract class ImageConverter {
 //  }
 
 
-  public abstract Image convert(byte[] raw);
+  public abstract Image convert(ByteBuffer raw);
 
   static Image makeImage(image_t source) {
 	CanvasImage image = PlayN.graphics().createImage(source.width, source.height);

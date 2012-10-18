@@ -29,11 +29,11 @@ import com.googlecode.playnquake.core.common.QuakeFiles;
 public class TGAConverter extends ImageConverter {
 
   @Override
-  public Image convert(byte[] raw) {
+  public Image convert(ByteBuffer raw) {
   	return makeImage(LoadTGA(raw));
   }
 
-  private static image_t LoadTGA(byte[] raw) {
+  private static image_t LoadTGA(ByteBuffer raw) {
     int columns, rows, numPixels;
     int pixbuf; // index into pic
     int row, column;

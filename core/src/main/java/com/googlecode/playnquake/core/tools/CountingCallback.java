@@ -18,6 +18,7 @@ public class CountingCallback   implements Callback<Void> {
   @Override
   public void onSuccess(Void result) {
     counter--;
+    System.out.println("count: " + counter);
     if (counter == 0) {
       callback.onSuccess(result);
     }

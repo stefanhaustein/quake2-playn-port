@@ -112,4 +112,15 @@ public class Compatibility {
       copyPartialBuffer(original, len, copy);
       return copy;
     }
+
+    public static ByteBuffer copyByteArrayToByteBuffe(byte[] data) {
+      return copyByteArrayToByteBuffe(data, 0, data.length);
+    }
+
+    public static ByteBuffer copyByteArrayToByteBuffe(byte[] data, int start, int len) {
+      ByteBuffer copy = ByteBuffer.allocate(len);
+      copy.put(data, start, len);
+      copy.position(0);
+      return copy;
+    }
 }

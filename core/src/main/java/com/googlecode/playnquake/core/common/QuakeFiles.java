@@ -74,10 +74,6 @@ public class QuakeFiles {
 		public byte[] filler; // size 58
 		public ByteBuffer data; //unbounded data
 
-		public pcx_t(byte[] dataBytes) {
-			this(ByteBuffer.wrap(dataBytes));
-		}
-
 		public pcx_t(ByteBuffer b) {
 			// is stored as little endian
 			b.order(ByteOrder.LITTLE_ENDIAN);
@@ -122,10 +118,6 @@ public class QuakeFiles {
 		public int pixel_size, attributes; // unsigned char
 
 		public ByteBuffer data; // (un)compressed data
-
-		public tga_t(byte[] dataBytes) {
-			this(ByteBuffer.wrap(dataBytes));
-		}
 
 		public tga_t(ByteBuffer b) {
 			// is stored as little endian
@@ -353,9 +345,6 @@ public class QuakeFiles {
 		public int contents;
 		public int value;
 
-		public miptex_t(byte[] dataBytes) {
-			this(ByteBuffer.wrap(dataBytes));
-		}
 
 		public miptex_t(ByteBuffer b) {
 			// is stored as little endian

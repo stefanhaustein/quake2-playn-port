@@ -28,7 +28,7 @@ public class Installer {
   ImageConverter walConverter = new WALConverter();
   StringBuilder imageSizes;
   
-  final Callback<Void> readyCallback = new Callback<Void>() {
+  final Callback<Void> convertedCallback = new Callback<Void>() {
     @Override
     public void onSuccess(Void result) {
       PlayN.storage().setItem("imageSizes", imageSizes.toString());
@@ -39,7 +39,7 @@ public class Installer {
       error("Error processing files", cause);
     }
   };
-  CountingCallback countingCallback = new CountingCallback(readyCallback);
+  CountingCallback countingCallback = new CountingCallback(convertedCallback);
 
   
   Installer(Tools tools, Callback<Void> doneCallback) {
@@ -79,7 +79,9 @@ public class Installer {
               @Override
               public void onSuccess(Void result) {
                 tools.println("pak0.pak successfully unpacked.");
-                unpacked();
+                // forcing convert here instead of calling unpacked
+                // because image sizes may stick in local storage
+                convert();
               }
 
               @Override
@@ -115,9 +117,7 @@ public class Installer {
 	   new Callback<ByteBuffer>() {
 		@Override
 		public void onSuccess(ByteBuffer result) {
-	      byte[] data = new byte[result.limit()];
-          result.get(data);
-          Image image = converter.convert(data);
+	      Image image = converter.convert(result);
           
           imageSizes.append(file.fullPath + "," + (int) image.width() + "," + (int) image.height() + "\n");
           

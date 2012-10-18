@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package com.googlecode.playnquake.core.tools;
 
 
+import java.nio.ByteBuffer;
+
 import playn.core.Image;
 
 import com.googlecode.playnquake.core.common.QuakeFiles;
@@ -26,19 +28,21 @@ import com.googlecode.playnquake.core.common.QuakeFiles;
 public class WALConverter extends ImageConverter {
 
   @Override
-  public Image convert(byte[] raw) {
+  public Image convert(ByteBuffer raw) {
 	// TODO Auto-generated method stub
     return makePalletizedImage(LoadWAL(raw));
   }
 
-  static image_t LoadWAL(byte[] raw)  {
+  static image_t LoadWAL(ByteBuffer raw)  {
     QuakeFiles.miptex_t mt = new QuakeFiles.miptex_t(raw);
 
     image_t image = new image_t();
     image.width = mt.width;
     image.height = mt.height;
     image.pix = new byte[mt.width * mt.height];
-    System.arraycopy(raw, mt.offsets[0], image.pix, 0, image.pix.length);
+    raw.position(mt.offsets[0]);
+    raw.get(image.pix);
+    raw.position(0);
     return image;
   }
 

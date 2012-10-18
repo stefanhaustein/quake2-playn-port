@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package com.googlecode.playnquake.core.tools;
 
 
+import java.nio.ByteBuffer;
+
 import playn.core.Image;
 
 import com.googlecode.playnquake.core.common.QuakeFiles;
@@ -26,11 +28,11 @@ import com.googlecode.playnquake.core.common.QuakeFiles;
 public class PCXConverter extends ImageConverter {
 
   @Override
-  public Image convert(byte[] raw) {
+  public Image convert(ByteBuffer raw) {
     return makePalletizedImage(LoadPCX(raw, null));
   }
 
-  private image_t LoadPCX(byte[] raw, byte[][] palette) {
+  private image_t LoadPCX(ByteBuffer raw, byte[][] palette) {
     QuakeFiles.pcx_t pcx;
     image_t img = new image_t();
 
@@ -54,7 +56,9 @@ public class PCXConverter extends ImageConverter {
 
     if (palette != null) {
       palette[0] = new byte[768];
-      System.arraycopy(raw, raw.length - 768, palette[0], 0, 768);
+      raw.position(raw.limit() - 768);
+      raw.get(palette[0]);
+      raw.position(0);
     }
 
     img.width = width;
