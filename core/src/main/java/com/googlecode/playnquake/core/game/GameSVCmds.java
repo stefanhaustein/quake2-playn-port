@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.StringTokenizer;
 
 import com.googlecode.playnquake.core.common.Com;
+import com.googlecode.playnquake.core.common.Compatibility;
 import com.googlecode.playnquake.core.common.ConsoleVariables;
 import com.googlecode.playnquake.core.common.Constants;
 import com.googlecode.playnquake.core.server.ServerGame;
@@ -95,9 +96,10 @@ public class GameSVCmds {
      */
     static boolean StringToFilter(String s, GameSVCmds.ipfilter_t f) {
 
-    	byte b[] = { 0, 0, 0, 0 };
+      byte b[] = { 0, 0, 0, 0 };
         byte m[] = { 0, 0, 0, 0 };
 
+        
         try {
             StringTokenizer tk = new StringTokenizer(s, ". ");
 
@@ -107,8 +109,8 @@ public class GameSVCmds {
                     m[n] = -1;
             }
 
-            f.mask = ByteBuffer.wrap(m).getInt();
-            f.compare = ByteBuffer.wrap(b).getInt();
+            f.mask = Compatibility.copyByteArrayToByteBuffe(m).getInt();
+            f.compare = Compatibility.copyByteArrayToByteBuffe(b).getInt();
         } catch (Exception e) {
             ServerGame.PF_cprintf(null, Constants.PRINT_HIGH, "Bad filter address: " + s + "\n");
             return false;

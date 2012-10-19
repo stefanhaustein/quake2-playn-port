@@ -47,10 +47,6 @@ public class TextureInfo {
   public String texture="";
   public int nexttexinfo; // for animations, -1 = end of chain
 
-  // works fine.
-  public TextureInfo(byte[] cmod_base, int o, int len) {
-    this(ByteBuffer.wrap(cmod_base, o, len).order(ByteOrder.LITTLE_ENDIAN));
-  }
 
   public TextureInfo(ByteBuffer bb) {
     byte str[] = new byte[32];
