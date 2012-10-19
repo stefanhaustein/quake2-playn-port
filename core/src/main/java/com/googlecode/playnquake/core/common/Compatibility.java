@@ -54,10 +54,6 @@ public class Compatibility {
 	public static void printStackTrace(Throwable e) {
 		e.printStackTrace();
 	}
-	
-	public void loadClass(String name) throws ClassNotFoundException {
-		System.out.println("Compatibility.loadClass: " +name);
-	}
 
 	public static void sleep(int i) {
 	 // System.out.println("Compatibility.sleep() dummy " +i);
