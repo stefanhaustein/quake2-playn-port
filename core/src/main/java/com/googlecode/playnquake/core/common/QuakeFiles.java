@@ -542,9 +542,6 @@ public class QuakeFiles {
 
 	public static class dleaf_t {
 
-		public dleaf_t(byte[] cmod_base, int i, int j) {
-			this(ByteBuffer.wrap(cmod_base, i, j).order(ByteOrder.LITTLE_ENDIAN));
-		}
 
 		public dleaf_t(ByteBuffer bb) {
 			contents = bb.getInt();

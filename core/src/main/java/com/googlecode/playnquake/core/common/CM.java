@@ -162,11 +162,10 @@ public class CM {
 
     public static int numvisibility;
 
-    public static byte map_visibility[] = new byte[Constants.MAX_MAP_VISIBILITY];
+    public static ByteBuffer map_visibility = ByteBuffer.allocate(Constants.MAX_MAP_VISIBILITY);
 
     /** Main visibility data. */
-    public static QuakeFiles.dvis_t map_vis = new QuakeFiles.dvis_t(ByteBuffer
-            .wrap(map_visibility));
+    public static QuakeFiles.dvis_t map_vis = new QuakeFiles.dvis_t(map_visibility.slice());
 
     public static int numentitychars;
 
@@ -829,10 +828,11 @@ public class CM {
 //        map_vis = new qfiles.dvis_t(bb);
 
         cmod_base.position(l.fileofs);
-        cmod_base.get(map_visibility, 0, l.filelen);
+//        cmod_base.get(map_visibility, 0, l.filelen);
+        Compatibility.copyPartialBuffer(cmod_base, l.filelen, map_visibility);
 
         // TODO(jgw): can we avoid the extra ByteBuffer here? Seems kind of silly.
-        ByteBuffer bb = ByteBuffer.wrap(map_visibility, 0, l.filelen);
+        ByteBuffer bb = map_visibility.slice(); //ByteBuffer.wrap(map_visibility, 0, l.filelen);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         map_vis = new QuakeFiles.dvis_t(bb);
     }
@@ -1651,7 +1651,7 @@ public class CM {
     /*
      * =================== CM_DecompressVis ===================
      */
-    public static void CM_DecompressVis(byte in[], int offset, byte out[]) {
+    public static void CM_DecompressVis(ByteBuffer in, int offset, byte out[]) {
         int c;
 
         int row;
@@ -1670,12 +1670,12 @@ public class CM {
         }
 
         do {
-            if (in[inp] != 0) {
-                out[outp++] = in[inp++];
+            if (in.get(inp) != 0) {
+                out[outp++] = in.get(inp++);
                 continue;
             }
 
-            c = in[inp + 1] & 0xFF;
+            c = in.get(inp + 1) & 0xFF;
             inp += 2;
             if (outp + c > row) {
                 c = row - (outp);
@@ -1853,11 +1853,10 @@ public class CM {
         //was: FS_Read(portalopen, sizeof(portalopen), f);
         int len = portalopen.length * 4;
 
-        byte buf[] = new byte[len];
+        ByteBuffer bb = ByteBuffer.allocate(len);
 
-        QuakeFileSystem.Read(buf, len, f);
+        QuakeFileSystem.Read(bb, len, f);
 
-        ByteBuffer bb = ByteBuffer.wrap(buf);
         IntBuffer ib = bb.asIntBuffer();
 
         for (int n = 0; n < portalopen.length; n++)

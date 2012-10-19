@@ -315,7 +315,6 @@ public final class QuakeFileSystem {
         int block, remaining;
         int offset = 0;
         int read = 0;
-        boolean tries = true;
 
         // read in chunks for progress bar
         remaining = len;
@@ -341,6 +340,22 @@ public final class QuakeFileSystem {
         }
     }
 
+    /**
+     * Read
+     * 
+     * Properly handles partial reads
+     */
+    public static void Read(ByteBuffer buffer, int len, RandomAccessFile f) {
+
+      byte[] tmp = new byte[len];
+      Read(tmp, len, f);
+      
+      int pos = buffer.position();
+      buffer.put(tmp);
+      buffer.position(pos);
+    }
+
+    
     /*
      * LoadFile
      * 
