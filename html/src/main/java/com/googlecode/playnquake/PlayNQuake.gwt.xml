@@ -16,6 +16,7 @@
 <module rename-to='PlayNQuake'>
   <inherits name='playn.GL11Emulation'/>
   <inherits name='playn.PlayN'/>
+  <inherits name="elemental.Elemental"/>
 
  <!--
   <set-property name="compiler.stackMode" value="emulated" />
