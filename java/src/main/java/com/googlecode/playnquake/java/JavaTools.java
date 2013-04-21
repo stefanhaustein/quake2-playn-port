@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
+import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.java.JavaImage;
 
@@ -22,7 +23,7 @@ public class JavaTools implements Tools {
   }
 
   @Override
-  public ByteBuffer convertToPng(Image image) {
+  public ByteBuffer convertToPng(CanvasImage image) {
     JavaImage javaImage = (JavaImage) image;
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
@@ -52,6 +53,12 @@ public class JavaTools implements Tools {
   @Override
   public void exit(int i) {
     System.exit(i);
+  }
+
+  @Override
+  public void prparationsDone() {
+    // TODO Auto-generated method stub
+    
   }
 
 

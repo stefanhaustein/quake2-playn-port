@@ -22,6 +22,7 @@ package com.googlecode.playnquake.core.tools;
 import java.nio.ByteBuffer;
 
 
+import playn.core.CanvasImage;
 import playn.core.Image;
 
 import com.googlecode.playnquake.core.common.QuakeFiles;
@@ -29,7 +30,7 @@ import com.googlecode.playnquake.core.common.QuakeFiles;
 public class TGAConverter extends ImageConverter {
 
   @Override
-  public Image convert(ByteBuffer raw) {
+  public CanvasImage convert(ByteBuffer raw) {
   	return makeImage(LoadTGA(raw));
   }
 

@@ -232,7 +232,7 @@ public class GlRenderer implements Renderer {
   }
 
   public void DrawString(int x, int y, String str) {
-    DrawString(x, y, str, 0, str.length());
+    DrawString(x, y, str, 0, str.length(), false);
   }
 
   public void DrawString(int x, int y, String str, boolean alt) {
@@ -322,7 +322,7 @@ public class GlRenderer implements Renderer {
   }
 
   public void DrawStretchPic(int x, int y, int w, int h, String pic) {
-
+    
     Image image;
 
     image = Images.findPicture(pic);
@@ -334,10 +334,9 @@ public class GlRenderer implements Renderer {
     // if (scrap_dirty)
     // Scrap_Upload();
 
-    // if ( ( ( gl_config.renderer == GL_RENDERER_MCD ) || ( (gl_config.renderer
-    // & GL_RENDERER_RENDITION) != 0) ) && !image.has_alpha)
-    // gl.glDisable(GLAdapter.GL_ALPHA_TEST);
-
+//    if (!image.has_alpha) {
+//     GlState.gl.glDisable(GL11.GL_ALPHA_TEST);
+//    }
     Images.GL_Bind(image.texnum);
     GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, MeshBuilder.OPTION_TEXTURE);
     GlState.meshBuilder.texCoord2f(0, 0);
@@ -350,9 +349,9 @@ public class GlRenderer implements Renderer {
     GlState.meshBuilder.vertex2f(x, y + h);
     GlState.meshBuilder.end(GlState.gl);
 
-    // if ( ( ( gl_config.renderer == GL_RENDERER_MCD ) || ( (gl_config.renderer
-    // & GL_RENDERER_RENDITION) !=0 ) ) && !image.has_alpha)
-    // gl.glEnable(GLAdapter.GL_ALPHA_TEST);
+//    if (!image.has_alpha) {
+//      GlState.gl.glEnable(GL11.GL_ALPHA_TEST);
+//    }
   }
 
   public final void DrawGetPicSize(Dimension dim, String pic) {
@@ -432,7 +431,7 @@ public class GlRenderer implements Renderer {
    * @see com.googlecode.playnquake.core.client.Renderer#DrawFill
    */
   public void DrawFill(int x, int y, int w, int h, int colorIndex) {
-
+    
     if (colorIndex > 255)
       Com.Error(Constants.ERR_FATAL, "Draw_Fill: bad color");
 
@@ -468,7 +467,8 @@ public class GlRenderer implements Renderer {
   public void DrawFadeScreen() {
     GlState.gl.glEnable(GL11.GL_BLEND);
     GlState.gl.glDisable(GL11.GL_TEXTURE_2D);
-    GlState.gl.glColor4f(0, 0, 0, 0.8f);
+//    GlState.gl.glColor4f(0, 0, 0, 0.8f);
+  GlState.gl.glColor4f(0, 0, 0, 0.666f);
     GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, 0);
 
     GlState.meshBuilder.vertex2f(0, 0);
@@ -493,6 +493,7 @@ public class GlRenderer implements Renderer {
       Window.Printf(Constants.PRINT_ALL, "Can't find pic: " + pic + '\n');
       return;
     }
+    
     // if (scrap_dirty)
     // Scrap_Upload();
 
@@ -500,9 +501,15 @@ public class GlRenderer implements Renderer {
     // & GL_RENDERER_RENDITION) != 0 ) ) && !image.has_alpha)
     // gl.glDisable (GLAdapter.GL_ALPHA_TEST);
 
+//    GlState.gl.glDisable(GL11.GL_ALPHA_TEST);
+    
     Images.GL_Bind(image.texnum);
-
+    
+   // GlState.gl.glColor4f(1.f, .5f, .5f, 1f);
+    
     GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, MeshBuilder.OPTION_TEXTURE);
+
+    
     GlState.meshBuilder.texCoord2f(0, 0);
     GlState.meshBuilder.vertex2f(x, y);
     GlState.meshBuilder.texCoord2f(1, 0);
@@ -529,7 +536,7 @@ public class GlRenderer implements Renderer {
     float hscale;
     int row;
     float t;
-
+    
     Images.GL_Bind(0);
 
     if (rows <= 256) {
@@ -596,10 +603,10 @@ public class GlRenderer implements Renderer {
     // GLAdapter.GL_UNSIGNED_BYTE,
     // image8 );
     // }
-    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D,
-        GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D,
-        GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+  //  GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D,
+   //     GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+   // GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D,
+     //   GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
     // if ( ( gl_config.renderer == GL_RENDERER_MCD ) || ( (gl_config.renderer &
     // GL_RENDERER_RENDITION) != 0 ) )
@@ -767,7 +774,7 @@ public class GlRenderer implements Renderer {
     GlState.gl.glDisable(GL11.GL_DEPTH_TEST);
     GlState.gl.glDisable(GL11.GL_CULL_FACE);
     GlState.gl.glDisable(GL11.GL_BLEND);
-    // gl.glEnable(GLAdapter.GL_ALPHA_TEST);
+    GlState.gl.glEnable(GL11.GL_ALPHA_TEST);
     GlState.gl.glColor4f(1, 1, 1, 1);
 
     /*
@@ -829,7 +836,7 @@ public class GlRenderer implements Renderer {
     for (int i = pendingImages.size() - 1; i >= 0; i--) {
       Image image = pendingImages.get(i);
       if (image.playNImage.isReady()) {
-        System.out.println("Image ready: " + image);
+        PlayNQuake.tools().println("Image ready: " + image);
         uploadImage(image);
         pendingImages.remove(i);
       }
@@ -850,48 +857,56 @@ public class GlRenderer implements Renderer {
   
   
   public void uploadImage(Image image) {
+    GlState.checkError("before upload image");
     image.has_alpha = true;
     image.complete = true;
-    
-    boolean mipMap = image.type != com.googlecode.playnquake.core.common.QuakeImage.it_pic && 
-        image.type != com.googlecode.playnquake.core.common.QuakeImage.it_sky;
-    
+
     Images.GL_Bind(image.texnum);
+    if (image.type == com.googlecode.playnquake.core.common.QuakeImage.it_pic || 
+        image.type == com.googlecode.playnquake.core.common.QuakeImage.it_sky) {
+      PlayNQuake.tools().println("upload non-mipmap image " + image.name + ":" + image.width + "x" + image.height);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP_TO_EDGE);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP_TO_EDGE);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+      image.playNImage.glTexImage2D(PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+      image.upload_width = image.width;
+      image.upload_height = image.height;
+    } else {
+      PlayNQuake.tools().println("upload mipmap image " + image.name + ":" + image.width + "x" + image.height);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+      int p2size = 1 << ((int) Math.ceil(Math.log(Math.max(image.width, image.height)) / Math.log(2)));
+      image.upload_width = p2size;
+      image.upload_height = p2size;
 
-    int p2w = 1 << ((int) Math.ceil(Math.log(image.width) / Math.log(2))); 
-    int p2h = 1 << ((int) Math.ceil(Math.log(image.height) / Math.log(2))); 
-
-    if (mipMap) {
-        p2w = p2h = Math.max(p2w, p2h);
+      int level = 0;
+      do {
+        playn.core.CanvasImage canvasImage = getTmpImage(p2size, p2size);
+        playn.core.Canvas canvas = canvasImage.canvas();
+        canvas.clear();
+        try {
+          canvas.drawImage(image.playNImage, 0, 0, p2size, p2size);
+        } catch(Exception e) {
+          PlayNQuake.tools().println("Error rendering image " + image.name + "; size: " + p2size + " MSG: " + e);
+          break;
+        }
+        canvasImage.glTexImage2D(PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, level++, GL20.GL_RGBA, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+        p2size /= 2;
+      }
+      while(p2size > 0);
     }
-    
-    image.upload_width = p2w;
-    image.upload_height = p2h;
 
-    int level = 0;
-    do {
-      playn.core.CanvasImage canvasImage = getTmpImage(p2w, p2h);
-      playn.core.Canvas canvas = canvasImage.canvas();
-      canvas.clear();
-      canvas.drawImage(image.playNImage, 0, 0, p2w, p2h);
-      canvasImage.glTexImage2D(PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, level++, GL20.GL_RGBA, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
-
-        p2w = p2w / 2;
-        p2h = p2h / 2;
-    }
-    while(mipMap && p2w > 0 && p2h > 0);
-    
-    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, 
-            mipMap ? GL11.GL_LINEAR_MIPMAP_NEAREST : GL11.GL_LINEAR);
-    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-    
     GLDebug.checkError(GlState.gl, "uploadImage");
   }
   
   
   @Override
   public Image GL_LoadNewImage(String name, int type) {
-    System.out.println("GlRenderer.GL_LoadNewImage(" + name  + ", " + type + ")" + PlayNQuake.getImageSize(name));
+    PlayNQuake.tools().println("GlRenderer.GL_LoadNewImage(" + name  + ", " + type + ")");
+    
     final Image image = Images.GL_Find_free_image_t(name, type);
 
     name = name.toLowerCase();
@@ -904,15 +919,17 @@ public class GlRenderer implements Renderer {
     }
     d = PlayNQuake.getImageSize(name);
     if (d == null) {
-        System.err.println("Size not found for " + name);
+      PlayNQuake.tools().println("*** Size not found for " + name);
         image.width = 128;
         image.height = 128;
     } else {
+      PlayNQuake.tools().println("Size: " + d);
         image.width = d.width;
         image.height = d.height;
     }
     
-    image.playNImage = PlayNQuake.tools().getFileSystem().getImage(name + ".png");
+    int cut = name.lastIndexOf('/');
+    image.playNImage = PlayNQuake.tools().getFileSystem().getImage(name.substring(0, cut + 1) + name.substring(cut + 1).toLowerCase() + ".png");
     pendingImages.add(image);
     
 //    if (type != com.googlecode.gwtquake.shared.common.QuakeImage.it_pic) {

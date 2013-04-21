@@ -4,12 +4,13 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import playn.core.CanvasImage;
 import playn.core.Image;
 import playn.core.PlayN;
 import playn.core.util.Callback;
 
 import com.googlecode.playnquake.core.tools.AsyncFilesystem;
-import com.googlecode.playnquake.core.tools.AsyncFilesystem.Entry;
+import com.googlecode.playnquake.core.tools.AsyncFilesystem.FileTask;
 import com.googlecode.playnquake.core.tools.CountingCallback;
 import com.googlecode.playnquake.core.tools.ImageConverter;
 import com.googlecode.playnquake.core.tools.PCXConverter;
@@ -27,21 +28,7 @@ public class Installer {
   ImageConverter tgaConverter = new TGAConverter();
   ImageConverter walConverter = new WALConverter();
   StringBuilder imageSizes;
-  
-  final Callback<Void> convertedCallback = new Callback<Void>() {
-    @Override
-    public void onSuccess(Void result) {
-      PlayN.storage().setItem("imageSizes", imageSizes.toString());
-      converted();
-    }
-    @Override
-    public void onFailure(Throwable cause) {
-      error("Error processing files", cause);
-    }
-  };
-  CountingCallback countingCallback = new CountingCallback(convertedCallback);
 
-  
   Installer(Tools tools, Callback<Void> doneCallback) {
     this.tools = tools;
     this.afs = tools.getFileSystem();
@@ -54,19 +41,23 @@ public class Installer {
   }
   
   void run() {
-	afs.getFile("/models/items/ammo/slugs/medium/tris.md2", 
+    tools.println("Running file converter / installer.");
+    afs.getFile("/models/items/ammo/slugs/medium/tris.md2", 
       new Callback<ByteBuffer>() {
-		@Override
-		public void onSuccess(ByteBuffer result) {
-		  unpacked();
-		}
+        @Override
+        public void onSuccess(ByteBuffer result) {
+          unpacked();
+        }
 
-		@Override
-		public void onFailure(Throwable cause) {
-		  unpack();
-		}});
-    }
-  
+        @Override
+        public void onFailure(Throwable cause) {
+          unpack();
+        }
+      }
+    );
+  }
+
+
   void unpack() {
     tools.println("Unpacking pak0.pak");
     afs.getFile("Install/Data/baseq2/pak0.pak", new Callback<ByteBuffer>() {
@@ -105,53 +96,66 @@ public class Installer {
       convert();
     }
   }
-  
-  void convert() {
-    imageSizes = new StringBuilder();
-    afs.processFiles("", processor, countingCallback.addAccess());
-  }
-  
 
-  void convert(final Entry file, final ImageConverter converter, final Callback<Void> callback) {
-	 afs.getFile(file.fullPath, 
-	   new Callback<ByteBuffer>() {
-		@Override
-		public void onSuccess(ByteBuffer result) {
-	      Image image = converter.convert(result);
-          
-          imageSizes.append(file.fullPath + "," + (int) image.width() + "," + (int) image.height() + "\n");
-          
-          ByteBuffer png = tools.convertToPng(image);
-          afs.saveFile(file.fullPath + ".png", png, 0, png.limit(), callback);
-		}
-		@Override
-		public void onFailure(Throwable cause) {
-			callback.onFailure(cause);
-		}
-	 });
+
+  void convert() {
+    tools.println("Converting Images");
+    imageSizes = new StringBuilder();
+    afs.processFiles("", processor, new Callback<Void>() {
+      @Override
+      public void onSuccess(Void result) {
+        PlayN.storage().setItem("imageSizes", imageSizes.toString());
+        converted();
+      }
+      @Override
+      public void onFailure(Throwable cause) {
+        error("Error processing files", cause);
+      }
+    });
+  }
+
+
+  void convert(final FileTask task, final ImageConverter converter) {
+    afs.getFile(task.fullPath, 
+        new Callback<ByteBuffer>() {
+          @Override
+          public void onSuccess(ByteBuffer result) {
+            CanvasImage image = converter.convert(result);
+            imageSizes.append(task.fullPath + "," + (int) image.width() + "," + (int) image.height() + "\n");
+            ByteBuffer png = tools.convertToPng(image);
+            
+            String path = task.fullPath;
+            int cut = path.lastIndexOf('/');
+            
+            afs.saveFile(path.substring(0, cut + 1) + path.substring(cut + 1).toLowerCase() + ".png", png, 0, png.limit(), task.readyCallback);
+          }
+          @Override
+          public void onFailure(Throwable cause) {
+            task.readyCallback.onFailure(cause);
+          }
+    });
   }
   
-  final Callback<Entry> processor = new Callback<Entry>() {
+  final Callback<FileTask> processor = new Callback<FileTask>() {
     @Override
-    public void onSuccess(Entry result) {
-      tools.println("Processing: " + result.fullPath);
-      if (result.directory) {
-        afs.processFiles(result.fullPath, processor, countingCallback.addAccess());
+    public void onSuccess(FileTask result) {
+      ImageConverter converter = null;
+      String lowerName = result.fullPath.toLowerCase();
+      if (lowerName.endsWith(".pcx")) {
+        converter = pcxConverter;
+      } else if (lowerName.endsWith(".tga")) {
+        converter = tgaConverter;
+      } else if (lowerName.endsWith(".wal")) {
+        converter = walConverter;
       } else {
-    	ImageConverter converter = null;
-    	if (result.name.endsWith(".pcx")) {
-    		converter = pcxConverter;
-    	} else if (result.name.endsWith(".tga")) {
-    		converter = tgaConverter;
-    	} else if (result.name.endsWith(".wal")) {
-    		converter = walConverter;
-    	}
-    	if (converter != null) {
-            tools.println("Converting: " + result.fullPath);
-    		convert(result, converter, countingCallback.addAccess());
-    	}
+        tools.println("Skipping: " + result.fullPath);
+        result.readyCallback.onSuccess(null);
+        return;
       }
+      tools.println("Converting: " + result.fullPath);
+      convert(result, converter);
     }
+
     @Override
     public void onFailure(Throwable cause) {
       tools.println("Error: " + cause);
@@ -164,6 +168,7 @@ public class Installer {
 
   void converted() {
     tools.println("All files processed!");
+    tools.prparationsDone();
     doneCallback.onSuccess(null);
   }
 }

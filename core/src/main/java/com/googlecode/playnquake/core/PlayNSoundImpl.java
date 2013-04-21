@@ -86,16 +86,16 @@ public class PlayNSoundImpl implements SoundImpl {
 
   // TODO check the sfx direct buffer size
   // 2MB sfx buffer
-  private ByteBuffer sfxDataBuffer = Lib.newByteBuffer(2 * 1024 * 1024);
+//  private ByteBuffer sfxDataBuffer = Lib.newByteBuffer(2 * 1024 * 1024);
 
   private FloatBuffer listenerOrigin = Lib.newFloatBuffer(3);
 
-  private FloatBuffer listenerOrientation = Lib.newFloatBuffer(6);
+ // private FloatBuffer listenerOrientation = Lib.newFloatBuffer(6);
 
-  private IntBuffer eaxEnv = Lib.newIntBuffer(1);
+//  private IntBuffer eaxEnv = Lib.newIntBuffer(1);
 
-  private ShortBuffer streamBuffer = sfxDataBuffer.slice()
-      .order(ByteOrder.BIG_ENDIAN).asShortBuffer();
+//  private ShortBuffer streamBuffer = sfxDataBuffer.slice()
+//      .order(ByteOrder.BIG_ENDIAN).asShortBuffer();
 
   public PlayNSoundImpl() {
     Init();

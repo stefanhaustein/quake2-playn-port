@@ -26,8 +26,10 @@ package com.googlecode.playnquake.core.render;
 import java.nio.FloatBuffer;
 
 import playn.gl11emulation.GL11;
+import playn.gl11emulation.GLDebug;
 import playn.gl11emulation.MeshBuilder;
 
+import com.googlecode.playnquake.core.PlayNQuake;
 import com.googlecode.playnquake.core.client.Dimension;
 import com.googlecode.playnquake.core.client.EntityType;
 import com.googlecode.playnquake.core.client.RendererState;
@@ -116,5 +118,13 @@ public class GlState
   
   
   public static final MeshBuilder meshBuilder = new MeshBuilder(10000);
+
+
+  public static void checkError(String string) {
+    int err = gl.glGetError();
+    if (err != 0) {
+      PlayNQuake.tools().println("Gl error " + err + ": " + GLDebug.getConstantName(err) + " @ " + string);
+    }
+  }
 
 }

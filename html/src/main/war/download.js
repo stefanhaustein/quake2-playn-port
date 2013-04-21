@@ -17,9 +17,9 @@ function fsErrorHandler(msg) {
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 
 println("");
-println("Initialing file system. Requesting user permission for 100M persistent memory.");
+println("Initialing file system. Requesting user permission for 200M persistent memory.");
 
-window.webkitStorageInfo.requestQuota(PERSISTENT, 100*1024*1024, 
+window.webkitStorageInfo.requestQuota(PERSISTENT, 200*1024*1024, 
   function(grantedBytes) {
     window.requestFileSystem(PERSISTENT, grantedBytes, onInitFs, 
       function(msg) {
@@ -37,6 +37,10 @@ window.webkitStorageInfo.requestQuota(PERSISTENT, 100*1024*1024,
   }
 );
 
+function done() {
+  // Fix active waiting!
+  window.quakeFileSystemReady = true;
+}
 
 function onInitFs(fileSystem) {
   println("File system initialized. Checking contents.")
@@ -45,6 +49,7 @@ function onInitFs(fileSystem) {
   window.quakeFileSystem.root.getFile("Splash/wav/btnx.wav", {},
     function() {
       println("Files downloaded and unpacked already.");
+      done();
     },
     function() {
       downloadAndUnpack();
@@ -69,6 +74,7 @@ var time = new Date().getTime();
 function processZipEntries(entries, startIndex) {
   if (startIndex >= entries.length) {
     println("Decompression done.")
+    done();
     return;
   }
   var entry = entries[startIndex];

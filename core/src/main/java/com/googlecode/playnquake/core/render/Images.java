@@ -240,7 +240,7 @@ public abstract class Images {
     ===============
     */
     static void GL_TextureMode(String string) {
-
+      /*
         int i;
         for (i = 0; i < NUM_GL_MODES; i++) {
             if (modes[i].name.equalsIgnoreCase(string))
@@ -266,6 +266,7 @@ public abstract class Images {
                 GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, gl_filter_max);
             }
         }
+        */
     }
 
     /*
@@ -814,12 +815,12 @@ public abstract class Images {
         }
 
         if (mipmap) {
-          GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, gl_filter_min);
-          GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, gl_filter_max);
+          GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+          GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         }
         else {
-          GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, gl_filter_max);
-          GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, gl_filter_max);
+          GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+          GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         }
 
         return (samples == gl_alpha_format);

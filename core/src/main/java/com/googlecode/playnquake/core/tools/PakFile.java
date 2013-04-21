@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package com.googlecode.playnquake.core.tools;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import playn.core.util.Callback;
 
@@ -34,13 +35,14 @@ public class PakFile {
   
   public PakFile(ByteBuffer packhandle) {
     this.packhandle = packhandle;
-    
+    this.packhandle.order(ByteOrder.LITTLE_ENDIAN);
+
     int ident = packhandle.getInt();
     int dirofs = packhandle.getInt();
     int dirlen = packhandle.getInt();
 
     if (ident != IDPAKHEADER) {
-       throw new RuntimeException("Data is not a packfile. ident: " + Integer.toHexString(ident));
+       throw new RuntimeException("Data is not a packfile. ident: " + Integer.toHexString(ident) + " expected: " + Integer.toHexString(IDPAKHEADER));
     }
   
     numpackfiles = dirlen / SIZE;
@@ -62,7 +64,12 @@ public class PakFile {
     byte[] tmpText = new byte[NAME_SIZE];
     packhandle.get(tmpText);
 
-    String name = new String(tmpText).trim();
+    int cut = 0;
+    while (cut < tmpText.length && tmpText[cut] > ' ') {
+      cut++;
+    }
+    
+    String name = new String(tmpText, 0, cut);
     tools.println("Unpacking " + name);
 
     int filepos = packhandle.getInt();

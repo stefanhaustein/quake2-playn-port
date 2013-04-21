@@ -24,6 +24,7 @@ import playn.java.JavaGraphics;
 import playn.java.JavaStaticImage;
 
 import com.googlecode.playnquake.core.tools.AsyncFilesystem;
+import com.googlecode.playnquake.core.tools.CountingCallback;
 
 public class JavaAsyncFilesystem implements AsyncFilesystem{
 
@@ -49,22 +50,29 @@ public class JavaAsyncFilesystem implements AsyncFilesystem{
     }
   }
 
+  
   @Override
-  public void processFiles(final String dirName, final Callback<Entry> processCallback, final Callback<Void> readyCallback) {
+  public void processFiles(final String dirName, final Callback<FileTask> processCallback, final Callback<Void> readyCallback) {
+    final CountingCallback countingCallback = new CountingCallback(readyCallback);
     PlayN.invokeLater(new Runnable() {
       @Override
       public void run() {
         File dir = new File(root, dirName);
+        System.out.println("dir: " + dir.getPath());
         for (String fileName: dir.list()) {
-          Entry entry = new Entry();
-          entry.directory = new File(dir, fileName).isDirectory();
-          entry.name = fileName;
-          entry.fullPath = new File(dirName, fileName).getPath();
-          processCallback.onSuccess(entry);
-          
-          
+          File relativeFile = new File(dirName, fileName);
+          File absoluteFile = new File(dir, fileName);
+          String fullPath = relativeFile.getPath();
+          if (absoluteFile.isDirectory()) {
+            processFiles(fullPath, processCallback, countingCallback.addAccess());
+          } else {
+            FileTask entry = new FileTask();
+            entry.fullPath = fullPath;
+            entry.readyCallback = countingCallback.addAccess();
+            processCallback.onSuccess(entry);
+          }
         }
-        readyCallback.onSuccess(null);
+        countingCallback.onSuccess(null);
       }
     });
   }

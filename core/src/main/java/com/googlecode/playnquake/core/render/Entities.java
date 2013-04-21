@@ -130,10 +130,10 @@ public class Entities {
 
 		Images.GL_TexEnv(GL11.GL_MODULATE);
 
-//		if (alpha == 1.0)
-//		  gl.glEnable(GLAdapter.GL_ALPHA_TEST);
-//		else
-//		  gl.glDisable(GLAdapter.GL_ALPHA_TEST);
+		if (alpha == 1.0)
+		  GlState.gl.glEnable(GL11.GL_ALPHA_TEST);
+		else
+		  GlState.gl.glDisable(GL11.GL_ALPHA_TEST);
 
 		GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, MeshBuilder.OPTION_TEXTURE);
 
@@ -159,7 +159,7 @@ public class Entities {
 
 		GlState.meshBuilder.end(GlState.gl);
 
-//		gl.glDisable(GLAdapter.GL_ALPHA_TEST);
+		GlState.gl.glDisable(GL11.GL_ALPHA_TEST);
 		Images.GL_TexEnv(GL11.GL_REPLACE);
 
 		if (alpha != 1.0F)
@@ -299,7 +299,7 @@ public class Entities {
 		if (GlState.v_blend[3] == 0.0f)
 			return;
 
-//		gl.glDisable(GLAdapter.GL_ALPHA_TEST);
+		GlState.gl.glDisable(GL11.GL_ALPHA_TEST);
 		GlState.gl.glEnable(GL11.GL_BLEND);
 		GlState.gl.glDisable(GL11.GL_DEPTH_TEST);
 		GlState.gl.glDisable(GL11.GL_TEXTURE_2D);
@@ -321,7 +321,7 @@ public class Entities {
 
 		GlState.gl.glDisable(GL11.GL_BLEND);
 		GlState.gl.glEnable(GL11.GL_TEXTURE_2D);
-//		gl.glEnable(GLAdapter.GL_ALPHA_TEST);
+		GlState.gl.glEnable(GL11.GL_ALPHA_TEST);
 
 		GlState.gl.glColor4f(1, 1, 1, 1);
 	}
@@ -482,7 +482,7 @@ public class Entities {
 		  GlState.gl.glDisable(GL11.GL_CULL_FACE);
 
 		GlState.gl.glDisable(GL11.GL_BLEND);
-//		gl.glDisable(GLAdapter.GL_ALPHA_TEST);
+		GlState.gl.glDisable(GL11.GL_ALPHA_TEST);
 		GlState.gl.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
@@ -599,7 +599,7 @@ public class Entities {
 	  GlState.gl.glDisable(GL11.GL_DEPTH_TEST);
 	  GlState.gl.glDisable(GL11.GL_CULL_FACE);
 	  GlState.gl.glDisable(GL11.GL_BLEND);
-//	  gl.glEnable(GLAdapter.GL_ALPHA_TEST);
+	  GlState.gl.glEnable(GL11.GL_ALPHA_TEST);
 	  GlState.gl.glColor4f(1, 1, 1, 1);
 	}
 

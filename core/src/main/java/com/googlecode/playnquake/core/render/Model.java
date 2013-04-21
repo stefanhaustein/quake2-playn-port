@@ -210,8 +210,11 @@ public class Model implements Cloneable {
 		** initialize the dynamic lightmap texture
 		*/
 		Images.GL_Bind( GlConfig.gl_state.lightmap_textures + 0 );
-		GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+	      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP_TO_EDGE);
+	      GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP_TO_EDGE);
+
+		GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+		GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		GlState.gl.glTexImage2D( GL11.GL_TEXTURE_2D,
 					   0,
 					   Surfaces.GL_LIGHTMAP_FORMAT,

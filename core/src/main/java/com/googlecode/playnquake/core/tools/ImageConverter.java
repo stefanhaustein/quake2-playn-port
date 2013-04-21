@@ -21,7 +21,6 @@ package com.googlecode.playnquake.core.tools;
 import java.nio.ByteBuffer;
 
 import playn.core.CanvasImage;
-import playn.core.Image;
 import playn.core.PlayN;
 
 import com.googlecode.playnquake.core.common.QuakeImage;
@@ -44,9 +43,9 @@ public abstract class ImageConverter {
 //  }
 
 
-  public abstract Image convert(ByteBuffer raw);
+  public abstract CanvasImage convert(ByteBuffer raw);
 
-  static Image makeImage(image_t source) {
+  static CanvasImage makeImage(image_t source) {
 	CanvasImage image = PlayN.graphics().createImage(source.width, source.height);
 	
 	int[] rgba = new int[source.pix.length / 4];
@@ -61,7 +60,7 @@ public abstract class ImageConverter {
     return image;
   }
 
-  static Image makePalletizedImage(image_t source) {
+  static CanvasImage makePalletizedImage(image_t source) {
     CanvasImage image = PlayN.graphics().createImage(source.width, source.height);
 
     int[] data = new int[source.width * source.height];

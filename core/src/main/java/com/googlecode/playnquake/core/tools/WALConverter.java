@@ -21,14 +21,14 @@ package com.googlecode.playnquake.core.tools;
 
 import java.nio.ByteBuffer;
 
-import playn.core.Image;
+import playn.core.CanvasImage;
 
 import com.googlecode.playnquake.core.common.QuakeFiles;
 
 public class WALConverter extends ImageConverter {
 
   @Override
-  public Image convert(ByteBuffer raw) {
+  public CanvasImage convert(ByteBuffer raw) {
 	// TODO Auto-generated method stub
     return makePalletizedImage(LoadWAL(raw));
   }

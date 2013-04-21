@@ -594,9 +594,12 @@ public abstract class Surfaces {
     int texture = (dynamic) ? 0 : gl_lms.current_lightmap_texture;
 
     Images.GL_Bind(GlConfig.gl_state.lightmap_textures + texture);
-    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D,
+    GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP_TO_EDGE);
+    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP_TO_EDGE);
+
+    GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D,
         GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-    GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D,
+    GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D,
         GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
     gl_lms.lightmap_buffer.rewind();

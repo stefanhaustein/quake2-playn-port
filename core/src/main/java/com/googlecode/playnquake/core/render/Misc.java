@@ -157,7 +157,7 @@ public class Misc {
 	  GlState.gl.glCullFace(GL11.GL_FRONT);
 	  GlState.gl.glEnable(GL11.GL_TEXTURE_2D);
 
-//	  gl.glEnable(GLAdapter.GL_ALPHA_TEST);
+	  GlState.gl.glEnable(GL11.GL_ALPHA_TEST);
 	  GlState.gl.glAlphaFunc(GL11.GL_GREATER, 0.666f);
 
 	  GlState.gl.glDisable (GL11.GL_DEPTH_TEST);
@@ -173,12 +173,14 @@ public class Misc {
 		Images.GL_TextureAlphaMode( GlConfig.gl_texturealphamode.string );
 		Images.GL_TextureSolidMode( GlConfig.gl_texturesolidmode.string );
 
+		/*
 		GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, Images.gl_filter_min);
 		GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, Images.gl_filter_max);
 
 		GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 		GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-
+*/
+		
 		GlState.gl.glBlendFunc (GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		Images.GL_TexEnv( GL11.GL_REPLACE );
