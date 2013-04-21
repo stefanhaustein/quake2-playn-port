@@ -840,6 +840,8 @@ public abstract class Images {
                 width, height, mipmap);
     }
 
+    static final byte[] DUMMY_TEXTURE_DATA = new byte[4];
+    
     public final static Image GL_Find_free_image_t(String name, int type) {
         Image image;
         int i;
@@ -870,8 +872,15 @@ public abstract class Images {
         image.width = image.upload_width = 32;
         image.height = image.upload_height = 32;
         image.complete = false;
-        image.texnum = GlConstants.TEXNUM_IMAGES + image.getId();
+        
+       // image.texnum = GlConstants.TEXNUM_IMAGES + image.getId();
+        
+        if (image.texnum == -1) {
+          image.texnum = GlState.generateTexture();
+        }
         GL_Bind(image.texnum);
+        image.setData(DUMMY_TEXTURE_DATA, 1, 1, 32);
+        
         
         return image;
     }

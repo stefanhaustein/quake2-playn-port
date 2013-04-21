@@ -565,6 +565,10 @@ public class Entities {
 
 		Surfaces.R_MarkLeaves(); // done here so we know if we're in water
 
+	    GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, Surfaces.staticBufferId);
+		GlState.gl.glBufferData(GL11.GL_ARRAY_BUFFER, Polygons.bufferIndex * Polygons.BYTE_STRIDE, Surfaces.globalPolygonInterleavedBuf, GL11.GL_STATIC_DRAW);
+        GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+		
 		Surfaces.R_DrawWorld();
 
 		R_DrawEntitiesOnList();

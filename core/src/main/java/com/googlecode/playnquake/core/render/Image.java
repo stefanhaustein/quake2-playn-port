@@ -39,7 +39,7 @@ public class Image {
 	public int upload_width, upload_height; // after power of two and picmip
 	public int registration_sequence; // 0 = free
 	public Surface texturechain; // for sort-by-texture world drawing
-	public int texnum; // gl texture binding
+	public int texnum = -1; // gl texture binding
 	public boolean has_alpha;
 
 	public boolean paletted;
@@ -83,7 +83,7 @@ public class Image {
 		upload_width = upload_height = 0;
 		registration_sequence = 0; // 0 = free
 		texturechain = null;
-		texnum = 0; // gl texture binding
+	//	texnum = 0; // gl texture binding
 		has_alpha = false;
 		paletted = false;
 		complete = false;

@@ -150,12 +150,7 @@ public class Model implements Cloneable {
 		}
 		GlState.r_newrefdef.lightstyles = Surfaces.lightstyles;
 
-		if (GlState.lightmap_textures == 0)
-		{
-			GlState.lightmap_textures = GlConstants.TEXNUM_LIGHTMAPS;
-		}
-
-		Surfaces.gl_lms.current_lightmap_texture = 1;
+		Surfaces.gl_lms.current_lightmap_texture = GlState.generateTexture();
 
 		/*
 		** if mono lightmaps are enabled and we want to use alpha
@@ -204,12 +199,13 @@ public class Model implements Cloneable {
 			for (int p = 0; p < 128 * 128; p++) {
 				Surfaces.dummy.put(p, 0x0ffffffff);
 			}
+			Surfaces.dynamicLightMapTexture = GlState.generateTexture();
 		}
 
 		/*
 		** initialize the dynamic lightmap texture
 		*/
-		Images.GL_Bind( GlConfig.gl_state.lightmap_textures + 0 );
+		Images.GL_Bind(Surfaces.dynamicLightMapTexture);
 	      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP_TO_EDGE);
 	      GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP_TO_EDGE);
 

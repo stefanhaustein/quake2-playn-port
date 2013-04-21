@@ -42,8 +42,6 @@ public class GlState
 
   public static int prev_mode;
 
-  public static int lightmap_textures;
-
   public static int currenttextures[]= {0,0};
   public static int currenttmu;
 
@@ -119,12 +117,24 @@ public class GlState
   
   public static final MeshBuilder meshBuilder = new MeshBuilder(10000);
 
+  static final int[] returnValueArray = new int[1];
 
   public static void checkError(String string) {
     int err = gl.glGetError();
     if (err != 0) {
       PlayNQuake.tools().println("Gl error " + err + ": " + GLDebug.getConstantName(err) + " @ " + string);
     }
+  }
+
+
+  public static int generateBuffer() {
+    gl.glGenBuffers(1, returnValueArray, 0);
+    return returnValueArray[0];
+  }
+
+  public static int generateTexture() {
+    gl.glGenTextures(1, returnValueArray, 0);
+    return returnValueArray[0];
   }
 
 }

@@ -1352,7 +1352,7 @@ public class Models  {
 			pos += count;
 		}
 		
-	//	model.staticTextureBufId = GlState.gl.generateStaticBufferId();
+	model.staticTextureBufId = GlState.generateBuffer();
 	}
 		
 	static void resetModelArrays() {

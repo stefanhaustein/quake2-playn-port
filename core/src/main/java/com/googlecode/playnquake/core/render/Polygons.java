@@ -2,6 +2,8 @@ package com.googlecode.playnquake.core.render;
 
 import java.nio.FloatBuffer;
 
+import playn.gl11emulation.GL11;
+
 import com.googlecode.playnquake.core.util.Lib;
 
 /**
@@ -45,6 +47,9 @@ public class Polygons {
   static void reset() {
     polyCount = 0;
     bufferIndex = 0;
+    if (Surfaces.staticBufferId == -1) {
+      Surfaces.staticBufferId = GlState.generateBuffer();
+    }
   }
 
   static FloatBuffer getRewoundBuffer() {

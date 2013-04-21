@@ -591,7 +591,7 @@ public class Surface {
     Images.pos_t lightPos = new Images.pos_t(surf.light_s, surf.light_t);
 
     if (!Surfaces.LM_AllocBlock(smax, tmax, lightPos)) {
-      Surfaces.LM_UploadBlock(false);
+      Surfaces.LM_UploadBlock();//false);
       Surfaces.LM_InitBlock();
       lightPos = new Images.pos_t(surf.light_s, surf.light_t);
       if (!Surfaces.LM_AllocBlock(smax, tmax, lightPos)) {
@@ -732,10 +732,9 @@ public class Surface {
         Surface.R_SetCacheState(surf);
         lmtex = surf.lightmaptexturenum;
       } else {
-        lmtex = 0;
+        lmtex = Surfaces.dynamicLightMapTexture;
       }
-      Images.GL_MBind(GL11.GL_TEXTURE1,
-          GlConfig.gl_state.lightmap_textures + lmtex);
+      Images.GL_MBind(GL11.GL_TEXTURE1, lmtex);
       GlState.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, surf.light_s,
           surf.light_t, smax, tmax, Surfaces.GL_LIGHTMAP_FORMAT,
           GL11.GL_UNSIGNED_BYTE, Surfaces.temp);
@@ -744,8 +743,7 @@ public class Surface {
     GlState.c_brush_polys++;
 
     Images.GL_MBind(GL11.GL_TEXTURE0, image.texnum);
-    Images.GL_MBind(GL11.GL_TEXTURE1, GlConfig.gl_state.lightmap_textures
-        + lmtex);
+    Images.GL_MBind(GL11.GL_TEXTURE1, lmtex);
 
     // ==========
     // PGM
@@ -758,13 +756,15 @@ public class Surface {
         scroll = -64.0f;
 
       for (p = surf.polys; p != null; p = p.chain) {
-        p.beginScrolling(scroll);
-        GlState.gl.glDrawArrays(GL11.GL_TRIANGLE_FAN, p.pos, p.numverts);  // Was GL_POLYGON here and below
-        p.endScrolling();
+        p.drawScrolling(scroll);
+//        p.beginScrolling(scroll);
+ //       GlState.gl.glDrawArrays(GL11.GL_TRIANGLE_FAN, p.pos, p.numverts);  // Was GL_POLYGON here and below
+  //      p.endScrolling();
       }
     } else {
       for (p = surf.polys; p != null; p = p.chain) {
-        GlState.gl.glDrawArrays(GL11.GL_TRIANGLE_FAN, p.pos, p.numverts);
+        p.draw();
+//        GlState.gl.glDrawArrays(GL11.GL_TRIANGLE_FAN, p.pos, p.numverts);
       }
     }
     // PGM
@@ -887,7 +887,7 @@ public class Surface {
         fa.R_BuildLightMap(Surfaces.temp2, smax);
         Surface.R_SetCacheState(fa);
 
-        Images.GL_Bind(GlState.lightmap_textures + fa.lightmaptexturenum);
+        Images.GL_Bind(fa.lightmaptexturenum);
 
         GlState.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, fa.light_s,
             fa.light_t, smax, tmax, Surfaces.GL_LIGHTMAP_FORMAT,

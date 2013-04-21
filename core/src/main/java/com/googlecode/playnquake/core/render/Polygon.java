@@ -43,6 +43,13 @@ public class Polygon {
   public void draw() {
     GlState.gl.glDrawArrays(GL11.GL_TRIANGLE_FAN, pos, numverts); // Was: GL_POLYGON
   }
+  
+  
+  public void drawScrolling(float scroll) {
+    beginScrolling(scroll);
+    GlState.gl.glDrawArrays(GL11.GL_TRIANGLE_FAN, pos, numverts);
+    endScrolling();
+  }
 
     /**
      * DrawGLFlowingPoly version that handles scrolling texture
@@ -53,9 +60,7 @@ public class Polygon {
       if (scroll == 0.0f) {
         scroll = -64.0f;
       }
-      beginScrolling(scroll);
-      GlState.gl.glDrawArrays(GL11.GL_TRIANGLE_FAN, pos, numverts);
-      endScrolling();
+      drawScrolling(scroll);
     }
 
     final void clear() {

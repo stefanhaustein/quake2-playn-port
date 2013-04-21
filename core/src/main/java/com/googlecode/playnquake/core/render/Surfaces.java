@@ -65,7 +65,7 @@ public abstract class Surfaces {
   static int c_visible_lightmaps;
   static int c_visible_textures;
 
-  static int staticBufferId;
+  static int staticBufferId = -1;
 
   public static final int GL_LIGHTMAP_FORMAT = GL11.GL_RGBA;
 
@@ -146,6 +146,8 @@ public abstract class Surfaces {
    * front, giving proper ordering.
    */
   static void R_DrawAlphaSurfaces() {
+    GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, Surfaces.staticBufferId);
+
     GlState.r_world_matrix.clear();
     //
     // go back to the world matrix
@@ -171,9 +173,11 @@ public abstract class Surfaces {
         GlState.gl.glColor4f(intens, intens, intens, 0.66f);
       else
         GlState.gl.glColor4f(intens, intens, intens, 1);
-      if ((s.flags & Constants.SURF_DRAWTURB) != 0)
+      if ((s.flags & Constants.SURF_DRAWTURB) != 0) {
+        GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         Surface.EmitWaterPolys(s);
-      else if ((s.texinfo.flags & Constants.SURF_FLOWING) != 0) // PGM 9/16/98
+        GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, staticBufferId);
+      } else if ((s.texinfo.flags & Constants.SURF_FLOWING) != 0) // PGM 9/16/98
         s.polys.drawFlowing(); // PGM
       else
         s.polys.draw();
@@ -184,9 +188,10 @@ public abstract class Surfaces {
     GlState.gl.glDisable(GL11.GL_BLEND);
 
     r_alpha_surfaces = null;
+    GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
   }
 
-  private static void glInterleavedArraysT2F_V3F(int byteStride, FloatBuffer buf) {
+ /* private static void glInterleavedArraysT2F_V3F(int byteStride, FloatBuffer buf) {
     int pos = buf.position();
     GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, byteStride, buf);
     GlState.gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -196,21 +201,21 @@ public abstract class Surfaces {
     GlState.gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 
     buf.position(pos);
-  }
+  }*/
 
   private static void glInterleavedArraysT2F_V3F(int byteStride,
       FloatBuffer buf, int staticDrawIdV) {
     GlState.gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
     
-    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, byteStride, buf);
-//    GlState.gl.glVertexAttribPointer(GL11.ARRAY_TEXCOORD_0, 2,
-//        GL11.GL_FLOAT, false, byteStride, 0, buf, staticDrawIdV);
+    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, byteStride, buf.position() * 4);
+ //   GlState.gl.glVertexAttribPointer(GlState.ARRAY_TEXCOORD_0, 2,
+ //       GL11.GL_FLOAT, false, byteStride, 0, buf, staticDrawIdV);
 
     int position = buf.position();
     buf.position(position + 2);
 
     GlState.gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-    GlState.gl.glVertexPointer(3, GL11.GL_FLOAT, byteStride, buf);
+    GlState.gl.glVertexPointer(3, GL11.GL_FLOAT, byteStride, buf.position() * 4);
     //GlState.gl.glVertexAttribPointer(GL11.ARRAY_POSITION, 3,
     //    GL11.GL_FLOAT, false, byteStride, 8, buf, staticDrawIdV);
     buf.position(position);
@@ -388,6 +393,8 @@ public abstract class Surfaces {
     e.angles[0] = -e.angles[0]; // stupid quake bug
     e.angles[2] = -e.angles[2]; // stupid quake bug
 
+    GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, Surfaces.staticBufferId);
+    
     Images.GL_EnableMultitexture(true);
     Images.GL_SelectTexture(GL11.GL_TEXTURE0);
     Images.GL_TexEnv(GL11.GL_REPLACE);
@@ -406,7 +413,7 @@ public abstract class Surfaces {
     GlState.gl.glClientActiveTexture(GL11.GL_TEXTURE1);
     int position = globalPolygonInterleavedBuf.position();
     globalPolygonInterleavedBuf.position(position + 5);
-    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, Polygons.BYTE_STRIDE, globalPolygonInterleavedBuf);
+    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, Polygons.BYTE_STRIDE, globalPolygonInterleavedBuf.position() * 4);
     globalPolygonInterleavedBuf.position(position);
 
     R_DrawInlineBModel();
@@ -417,6 +424,8 @@ public abstract class Surfaces {
     Images.GL_EnableMultitexture(false);
 
     GlState.gl.glPopMatrix();
+    GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+
   }
 
   /*
@@ -463,6 +472,7 @@ public abstract class Surfaces {
     Images.GL_SelectTexture(GL11.GL_TEXTURE0);
     Images.GL_TexEnv(GL11.GL_REPLACE);
 
+    GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, Surfaces.staticBufferId);
     // glInterleavedArraysT2F_V3F(Polygon.BYTE_STRIDE,
     // globalPolygonInterleavedBuf);
     glInterleavedArraysT2F_V3F(Polygons.BYTE_STRIDE,
@@ -475,7 +485,7 @@ public abstract class Surfaces {
 //        globalPolygonInterleavedBuf, staticBufferId);
     int position = globalPolygonInterleavedBuf.position();
     globalPolygonInterleavedBuf.position(position + 5);
-    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, Polygons.BYTE_STRIDE, globalPolygonTexCoord1Buf);
+    GlState.gl.glTexCoordPointer(2, GL11.GL_FLOAT, Polygons.BYTE_STRIDE, globalPolygonInterleavedBuf.position() * 4);
     globalPolygonInterleavedBuf.position(position);
 
     if (GlConfig.gl_lightmap.value != 0)
@@ -491,6 +501,8 @@ public abstract class Surfaces {
     Images.GL_EnableMultitexture(false);
 
     DrawTextureChains();
+    GlState.gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+
     SkyBox.R_DrawSkyBox();
     R_DrawTriangleOutlines();
   }
@@ -590,10 +602,10 @@ public abstract class Surfaces {
    * 
    * @param dynamic
    */
-  static void LM_UploadBlock(boolean dynamic) {
-    int texture = (dynamic) ? 0 : gl_lms.current_lightmap_texture;
+  static void LM_UploadBlock() {
+    int texture = gl_lms.current_lightmap_texture;
 
-    Images.GL_Bind(GlConfig.gl_state.lightmap_textures + texture);
+    Images.GL_Bind(texture);
     GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP_TO_EDGE);
     GlState.gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP_TO_EDGE);
 
@@ -603,7 +615,7 @@ public abstract class Surfaces {
         GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
     gl_lms.lightmap_buffer.rewind();
-    if (dynamic) {
+   /* if (dynamic) {
       int height = 0;
       for (int i = 0; i < BLOCK_WIDTH; i++) {
         if (gl_lms.allocated[i] > height)
@@ -613,17 +625,20 @@ public abstract class Surfaces {
       GlState.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0,
           BLOCK_WIDTH, height, GL_LIGHTMAP_FORMAT, GL11.GL_UNSIGNED_BYTE,
           gl_lms.lightmap_buffer);
-    } else {
+    } else { */
       GlState.gl.glTexImage2D(GL11.GL_TEXTURE_2D, 0,
           GL_LIGHTMAP_FORMAT/* gl_lms.internal_format */, BLOCK_WIDTH,
           BLOCK_HEIGHT, 0, GL_LIGHTMAP_FORMAT, GL11.GL_UNSIGNED_BYTE,
           gl_lms.lightmap_buffer);
+    
+      gl_lms.current_lightmap_texture = GlState.generateTexture();
+/*       
       if (++gl_lms.current_lightmap_texture == MAX_LIGHTMAPS)
         Com.Error(Constants.ERR_DROP,
             "LM_UploadBlock() - MAX_LIGHTMAPS exceeded\n");
-
+*/
       // debugLightmap(gl_lms.lightmap_buffer, 128, 128, 4);
-    }
+   // }
   }
 
   /**
@@ -671,7 +686,7 @@ public abstract class Surfaces {
    * GL_EndBuildingLightmaps
    */
   static void GL_EndBuildingLightmaps() {
-    LM_UploadBlock(false);
+    LM_UploadBlock(); // false);
     Images.GL_EnableMultitexture(false);
   }
 
@@ -679,13 +694,13 @@ public abstract class Surfaces {
    * new buffers for vertex array handling
    */
   static FloatBuffer globalPolygonInterleavedBuf = Polygons.getRewoundBuffer();
-  static FloatBuffer globalPolygonTexCoord1Buf = null;
+  //static FloatBuffer globalPolygonTexCoord1Buf = null;
 
-  static {
+  /*static {
     globalPolygonInterleavedBuf.position(Polygons.STRIDE - 2);
     globalPolygonTexCoord1Buf = globalPolygonInterleavedBuf.slice();
     globalPolygonInterleavedBuf.position(0);
-  };
+  };*/
 
   // ImageFrame frame;
 
@@ -719,6 +734,8 @@ public abstract class Surfaces {
   }
 
   static float[] s_blocklights = new float[34 * 34 * 3];
+
+  public static int dynamicLightMapTexture;
 
   /**
    * SubdividePolygon
