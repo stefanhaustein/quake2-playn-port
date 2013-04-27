@@ -1,5 +1,6 @@
 function println(s) {
   document.getElementById("log").innerText += s +"\n";
+  document.getElementById("log-bottom").scrollIntoView();
 }
 
 function backspace(cnt, s) {
@@ -8,10 +9,11 @@ function backspace(cnt, s) {
 }
 
 function error(msg) {
-  window.alert(msg);
+  println("ERROR: " + msg);
 }
 
 function fsErrorHandler(msg) {
+  println("ERROR: " + msg);
 }
 
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
@@ -46,20 +48,21 @@ function onInitFs(fileSystem) {
   println("File system initialized. Checking contents.")
   window.quakeFileSystem = fileSystem;
 
-  window.quakeFileSystem.root.getFile("Splash/wav/btnx.wav", {},
+  window.quakeFileSystem.root.getFile("splash/wav/btnx.wav", {},
     function() {
       println("Files downloaded and unpacked already.");
       done();
     },
     function() {
-      downloadAndUnpack();
+      println("Files not available. Waiting for user to provide URL and press 'Start'.");
     }
   );
 }
 
 function downloadAndUnpack() {
-  println("Donwloading and inflating q2-314-demo-x86.exe.");
-  zip.createReader(new zip.HttpReader("id/q2-314-demo-x86.exe"), function(reader) {
+  var url = document.getElementById('source_url').value;
+  println("Donwloading and inflating " + url);
+  zip.createReader(new zip.HttpReader(url), function(reader) {
   reader.getEntries(function(entries) {
     processZipEntries(entries, 0);
     }); // getEntries

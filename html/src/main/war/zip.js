@@ -189,7 +189,7 @@
 					callback();
 				}, false);
 				request.addEventListener("error", onerror, false);
-				request.open("GET", url);
+				request.open("GET", url, true);
 				request.responseType = "arraybuffer";
 				request.send();
 			} else
@@ -726,6 +726,10 @@
 							entry.filename = ((entry.bitFlag & 0x0800) === 0x0800) ? decodeUTF8(filename) : decodeASCII(filename);
 							if (!entry.directory && entry.filename.charAt(entry.filename.length - 1) == "/")
 								entry.directory = true;
+								
+							// HACK(haustein)
+				            entry.filename = entry.filename.toLowerCase();
+						    
 							comment = getString(data.array.subarray(index + 46 + entry.filenameLength + entry.extraFieldLength, index + 46
 									+ entry.filenameLength + entry.extraFieldLength + entry.commentLength));
 							entry.comment = ((entry.bitFlag & 0x0800) === 0x0800) ? decodeUTF8(comment) : decodeASCII(comment);

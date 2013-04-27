@@ -1,5 +1,7 @@
 package com.googlecode.playnquake.html;
 
+//import com.google.gwt.core.client.GWT;
+//import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.googlecode.playnquake.core.PlayNQuake;
 import com.googlecode.playnquake.core.tools.Tools;
 
@@ -11,9 +13,25 @@ public class PlayNQuakeHtml extends HtmlGame {
 
   @Override
   public void start() {
-    HtmlPlatform platform = HtmlPlatform.register();
-    Tools tools = new GwtTools();
-    tools.println("Starting game");
+    
+    
+    HtmlPlatform.Configuration config = new HtmlPlatform.Configuration();
+    config.experimentalFullscreen = true;
+    HtmlPlatform platform = HtmlPlatform.register(config);
+    final Tools tools = new GwtTools();
+
+    /*
+    GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+      @Override
+      public void onUncaughtException(Throwable t) {
+        tools.println("" + t);
+        for (StackTraceElement e : t.getStackTrace()) {
+          tools.println("" + e);
+        }
+      } 
+    });
+   */
+    
     PlayN.run(new PlayNQuake(tools));
   }
 

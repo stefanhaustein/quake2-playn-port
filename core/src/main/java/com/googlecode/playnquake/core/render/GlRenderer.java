@@ -928,8 +928,7 @@ public class GlRenderer implements Renderer {
         image.height = d.height;
     }
     
-    int cut = name.lastIndexOf('/');
-    image.playNImage = PlayNQuake.tools().getFileSystem().getImage(name.substring(0, cut + 1) + name.substring(cut + 1).toLowerCase() + ".png");
+    image.playNImage = PlayNQuake.tools().getFileSystem().getImage(name.toLowerCase() + ".png");
     pendingImages.add(image);
     
 //    if (type != com.googlecode.gwtquake.shared.common.QuakeImage.it_pic) {

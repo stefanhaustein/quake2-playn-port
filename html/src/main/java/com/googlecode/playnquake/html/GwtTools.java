@@ -51,6 +51,7 @@ public class GwtTools implements Tools {
     var log = $doc.getElementById("log");
     if (log) {
       log.innerText += text +"\n"
+      $doc.getElementById("log-bottom").scrollIntoView();
     }
   }-*/;
 
@@ -73,7 +74,7 @@ public class GwtTools implements Tools {
 
   @Override
   public void prparationsDone() {
-    Element log = Document.get().getElementById("log");
+    Element log = Document.get().getElementById("splash");
     Document.get().getBody().removeChild(log);
   }
 

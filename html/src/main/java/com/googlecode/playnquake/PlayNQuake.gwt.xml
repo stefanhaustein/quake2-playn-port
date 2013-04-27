@@ -18,9 +18,10 @@
   <inherits name='playn.PlayN'/>
   <inherits name="elemental.Elemental"/>
 
- <!--
+<!--
   <set-property name="compiler.stackMode" value="emulated" />
   <set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true" />
+ 
 
  
     Optionally, enable gwt-log's advanced logging features:

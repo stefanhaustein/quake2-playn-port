@@ -69,7 +69,7 @@ public class PakFile {
       cut++;
     }
     
-    String name = new String(tmpText, 0, cut);
+    String name = new String(tmpText, 0, cut).toLowerCase();
     tools.println("Unpacking " + name);
 
     int filepos = packhandle.getInt();

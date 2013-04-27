@@ -272,7 +272,8 @@ public class ServerInit {
 				SV_CreateBaseline();
 
 				// check for a savegame
-				SV_CheckForSavegame();
+				// TODO(haustein)
+				// SV_CheckForSavegame();
 
 				// set serverinfo variable
 				ConsoleVariables.FullSet("mapname", sv.name, Constants.CVAR_SERVERINFO

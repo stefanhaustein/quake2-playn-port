@@ -7,7 +7,6 @@ import com.googlecode.playnquake.core.common.Globals;
 import com.googlecode.playnquake.core.common.QuakeCommon;
 import com.googlecode.playnquake.core.common.ResourceLoader;
 import com.googlecode.playnquake.core.render.GlRenderer;
-import com.googlecode.playnquake.core.server.ServerMain;
 import com.googlecode.playnquake.core.sound.Sound;
 import com.googlecode.playnquake.core.tools.Tools;
 
@@ -69,6 +68,7 @@ public class PlayNQuake implements Game {
    * Game initialization, after resources are loaded / converted.
    */
   void initGame() {
+    PlayN.graphics().setSize(800, 500);
     
     loadImageSizes();
     Globals.autojoin.value = 0;

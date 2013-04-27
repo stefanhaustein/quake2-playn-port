@@ -18,9 +18,17 @@
   <head>
     <title>PlayN Quake II Demo Port</title>
   </head>
-  <body style="background-color:#000;color:#0f0">
-    <pre id="log">PlayN Quake II Demo Port
-</pre>
+  <body style="background-color:#000;color:#ddd;border:0;margin:0;padding:0">
+    <div id="splash" style="margin:20px">
+      <pre>PlayN Quake II Demo Port
+Download Quake II Resources from:
+</pre> <input id="source_url" size="100" value="http://commondatastorage.googleapis.com/quake2demo/q2-314-demo-x86.exe"> 
+       <input id="download_button" type="button" value="Start" onclick="this.disabled=true; downloadAndUnpack()"><br>
+<pre id="log">
+</pre><div id="log-bottom"></div>
+    </div>
+    <div style="margin-left: auto;
+  margin-right: auto;" id='playn-root'></div>
     <script src="zip.js"></script>
     <script src="download.js"></script>
     <script src="PlayNQuake/PlayNQuake.nocache.js"></script>

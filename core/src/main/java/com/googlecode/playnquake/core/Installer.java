@@ -41,7 +41,6 @@ public class Installer {
   }
   
   void run() {
-    tools.println("Running file converter / installer.");
     afs.getFile("/models/items/ammo/slugs/medium/tris.md2", 
       new Callback<ByteBuffer>() {
         @Override
@@ -60,7 +59,7 @@ public class Installer {
 
   void unpack() {
     tools.println("Unpacking pak0.pak");
-    afs.getFile("Install/Data/baseq2/pak0.pak", new Callback<ByteBuffer>() {
+    afs.getFile("install/data/baseq2/pak0.pak", new Callback<ByteBuffer>() {
 
       @Override
       public void onSuccess(ByteBuffer result) {
@@ -125,9 +124,8 @@ public class Installer {
             ByteBuffer png = tools.convertToPng(image);
             
             String path = task.fullPath;
-            int cut = path.lastIndexOf('/');
             
-            afs.saveFile(path.substring(0, cut + 1) + path.substring(cut + 1).toLowerCase() + ".png", png, 0, png.limit(), task.readyCallback);
+            afs.saveFile(path.toLowerCase() + ".png", png, 0, png.limit(), task.readyCallback);
           }
           @Override
           public void onFailure(Throwable cause) {

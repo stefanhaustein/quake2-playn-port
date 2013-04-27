@@ -554,10 +554,11 @@ public class Surface {
     int i;
     float s, t, os, ot;
     Polygon p, bp;
+    GlState.meshBuilder.begin(MeshBuilder.Mode.TRIANGLE_FAN, MeshBuilder.OPTION_TEXTURE);
     for (bp = fa.polys; bp != null; bp = bp.next) {
       p = bp;
 
-      GlState.meshBuilder.begin(MeshBuilder.Mode.TRIANGLE_FAN, MeshBuilder.OPTION_TEXTURE);
+      GlState.meshBuilder.setMode(MeshBuilder.Mode.TRIANGLE_FAN);
       for (i = 0; i < p.numverts; i++) {
         os = p.getS1(i);
         ot = p.getT1(i);
@@ -574,8 +575,8 @@ public class Surface {
         GlState.meshBuilder.texCoord2f(s, t);
         GlState.meshBuilder.vertex3f(p.getX(i), p.getY(i), p.getZ(i));
       }
-      GlState.meshBuilder.end(GlState.gl);
     }
+    GlState.meshBuilder.end(GlState.gl);
   }
 
   /**

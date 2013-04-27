@@ -93,7 +93,7 @@ public class PlayNALAdapter extends ALAdapter {
 
     BufferData(String location) {
       this.location = location;
-      sound = PlayNQuake.tools().getFileSystem().getSound(location);
+      sound = PlayNQuake.tools().getFileSystem().getSound(location.toLowerCase());
     }
   }
 

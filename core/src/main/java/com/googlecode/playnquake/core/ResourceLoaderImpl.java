@@ -38,9 +38,10 @@ public class ResourceLoaderImpl implements ResourceLoader.Impl {
   public void reset() {
   }
   
-  public void loadResourceAsync(final String path, final ResourceLoader.Callback callback) {
+  public void loadResourceAsync(final String rawPath, final ResourceLoader.Callback callback) {
     missing++;
     
+    final String path = rawPath.toLowerCase();
     System.out.println("Requesting resource: " + path);
     
     PlayNQuake.tools().getFileSystem().getFile(path, new Callback<ByteBuffer>() {
