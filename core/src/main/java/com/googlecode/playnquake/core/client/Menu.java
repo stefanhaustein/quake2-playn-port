@@ -2017,9 +2017,9 @@ public final class Menu {
         Menu_AddItem(s_game_menu, s_medium_game_action);
         Menu_AddItem(s_game_menu, s_hard_game_action);
         Menu_AddItem(s_game_menu, s_blankline);
-        Menu_AddItem(s_game_menu, s_load_game_action);
-        Menu_AddItem(s_game_menu, s_save_game_action);
-        Menu_AddItem(s_game_menu, s_blankline);
+   //     Menu_AddItem(s_game_menu, s_load_game_action);
+    //    Menu_AddItem(s_game_menu, s_save_game_action);
+   //     Menu_AddItem(s_game_menu, s_blankline);
         Menu_AddItem(s_game_menu, s_demo_action);
         Menu_AddItem(s_game_menu, s_benchmark_action);
         Menu_AddItem(s_game_menu, s_blankline);

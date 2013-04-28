@@ -81,7 +81,6 @@ public class TGAConverter extends ImageConverter {
         for (column = 0; column < columns; column++) {
           switch (targa_header.pixel_size) {
             case 24:
-
               blue = buf_p.get();
               green = buf_p.get();
               red = buf_p.get();

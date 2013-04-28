@@ -341,7 +341,7 @@ public class SkyBox {
       t = sky_max;
 
     t = 1.0f - t;
-    GlState.meshBuilder.texCoord2f(s, t);
+    GlState.meshBuilder.texCoord2f(s/6.f + skytexorder[axis]/6.f, t);
     GlState.meshBuilder.vertex3f(v1[0], v1[1], v1[2]);
   }
 
@@ -367,6 +367,8 @@ public class SkyBox {
     GlState.gl.glRotatef(GlState.r_newrefdef.time * SkyBox.skyrotate,
         SkyBox.skyaxis[0], SkyBox.skyaxis[1], SkyBox.skyaxis[2]);
 
+    Images.GL_Bind(SkyBox.sky_images[0].texnum); // skytexorder[i]
+    GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, MeshBuilder.OPTION_TEXTURE);
     for (i = 0; i < 6; i++) {
       if (SkyBox.skyrotate != 0) { // hack, forces full sky to draw when
                                    // rotating
@@ -379,15 +381,12 @@ public class SkyBox {
       if (skymins[0][i] >= skymaxs[0][i] || skymins[1][i] >= skymaxs[1][i])
         continue;
 
-      Images.GL_Bind(SkyBox.sky_images[skytexorder[i]].texnum);
-
-      GlState.meshBuilder.begin(MeshBuilder.Mode.QUADS, MeshBuilder.OPTION_TEXTURE);
       MakeSkyVec(skymins[0][i], skymins[1][i], i);
       MakeSkyVec(skymins[0][i], skymaxs[1][i], i);
       MakeSkyVec(skymaxs[0][i], skymaxs[1][i], i);
       MakeSkyVec(skymaxs[0][i], skymins[1][i], i);
-      GlState.meshBuilder.end(GlState.gl);
     }
+    GlState.meshBuilder.end(GlState.gl);
     GlState.gl.glPopMatrix();
   }
 
@@ -421,6 +420,8 @@ public class SkyBox {
       // gl.log("loadSky:" + pathname);
 
       SkyBox.sky_images[i] = Images.findTexture(pathname, QuakeImage.it_sky);
+      Images.skyTarget = sky_images[0];
+      SkyBox.sky_images[i].skyIndex = i;
 
       if (SkyBox.sky_images[i] == null)
         SkyBox.sky_images[i] = GlState.r_notexture;

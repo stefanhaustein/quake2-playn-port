@@ -19,9 +19,17 @@ function fsErrorHandler(msg) {
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 
 println("");
-println("Initialing file system. Requesting user permission for 200M persistent memory.");
 
-window.webkitStorageInfo.requestQuota(PERSISTENT, 200*1024*1024, 
+window.storageInfo = window.storageInfo || window.mozStorageInfo || window.webkitStorageInfo;
+
+if (!window.storageInfo) {
+   println("File System not available.");
+   println("Try this demo with Google Chrome or a different browser with full HTML5 support.")
+} else {
+   println("Initialing file system. Requesting user permission for 200M persistent memory.");
+}
+
+window.storageInfo.requestQuota(PERSISTENT, 200*1024*1024, 
   function(grantedBytes) {
     window.requestFileSystem(PERSISTENT, grantedBytes, onInitFs, 
       function(msg) {
@@ -55,6 +63,7 @@ function onInitFs(fileSystem) {
     },
     function() {
       println("Files not available. Waiting for user to provide URL and press 'Start'.");
+      println("");
     }
   );
 }
@@ -66,8 +75,8 @@ function downloadAndUnpack() {
   reader.getEntries(function(entries) {
     processZipEntries(entries, 0);
     }); // getEntries
-  }, function(error) {
-    error("Creating a ZIP reader failed: " + error);
+  }, function(msg) {
+    error("Creating a ZIP reader failed: " + msg);
   });
 }
 

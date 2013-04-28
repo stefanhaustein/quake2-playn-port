@@ -94,13 +94,24 @@ public class QuakeImage {
 	
 	public static final int ALPHA_MASK = 0x0ff000000;
 
+	static final float GAMMA = 1.5f;
+	static final float GAMMA_INV = 1.0f / GAMMA;
+	
+	public static int gamma(int c) {
+	   int corr = Math.round(255.0f*(float)Math.pow(c/255.0f, GAMMA_INV));
+	   if (corr > 255) corr = 255;
+	   return c;
+	}
+	
 	static {
 		int len = PALETTE_ARGB.length;
 		for (int i = 0; i < len; i++) {
 	      int abgr = QuakeImage.PALETTE_ABGR[i];
-	      int argb = (abgr & 0xff00ff00) | ((abgr >> 16) & 255)
-	          | ((abgr & 255) << 16);
-	      PALETTE_ARGB[i] = argb;
+	      int alpha = (abgr >> 24) & 255;
+	      int blue = gamma((abgr >> 16) & 255);
+	      int green = gamma((abgr >> 8) & 255);
+	      int red = gamma(abgr & 255);
+	      PALETTE_ARGB[i] = (alpha << 24) | (red << 16) | (green << 8) | blue;
 	    }
 	}
 	

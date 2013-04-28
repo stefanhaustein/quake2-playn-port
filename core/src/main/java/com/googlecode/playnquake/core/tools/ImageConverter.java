@@ -53,7 +53,9 @@ public abstract class ImageConverter {
 	for (int i = 0; i < rgba.length; i++) {
 	  rgba[i] = ((source.pix[ofs]&255) << 16) |
 			    ((source.pix[ofs+1]&255) << 8) |
-			    ((source.pix[ofs+2]&255));
+			    (source.pix[ofs+2]&255) | 
+			    ((source.pix[ofs+3]&255) << 24);
+	  ofs += 4;
 	}
 	
 	image.setRgb(0, 0, source.width, source.height, rgba, 0, source.width);

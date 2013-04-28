@@ -89,7 +89,10 @@ public class GlConfig {
     GlConfig.gl_particle_att_b = ConsoleVariables.Get("gl_particle_att_b", "0.0", CVAR_ARCHIVE);
     GlConfig.gl_particle_att_c = ConsoleVariables.Get("gl_particle_att_c", "0.01", CVAR_ARCHIVE);
 
-    GlConfig.gl_modulate = ConsoleVariables.Get("gl_modulate", "1.5", CVAR_ARCHIVE);
+    GlConfig.gl_modulate = ConsoleVariables.Get("gl_modulate", 
+        "2",
+//        "1.5",
+        CVAR_ARCHIVE);
     GlConfig.gl_log = ConsoleVariables.Get("gl_log", "0", 0);
     GlConfig.gl_bitdepth = ConsoleVariables.Get("gl_bitdepth", "0", 0);
     GlConfig.gl_mode = ConsoleVariables.Get("gl_mode", "3", CVAR_ARCHIVE); // 640x480

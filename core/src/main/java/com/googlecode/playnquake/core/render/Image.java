@@ -27,7 +27,9 @@ import com.googlecode.playnquake.core.common.QuakeImage;
 
 public class Image {
 	
-	// used to get the pos in array
+	public int skyIndex;
+
+  // used to get the pos in array
 	// added by cwei
 	private int id;
 	

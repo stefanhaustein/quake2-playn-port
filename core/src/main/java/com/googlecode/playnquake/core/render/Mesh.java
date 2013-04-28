@@ -64,6 +64,8 @@ public class Mesh {
    * @param frontv
    * @param backv
    */
+  
+  // NOT USED. GL_LerpVertsDA is called instead... see below.
   static void GL_LerpVerts(int nverts, int[] ov, int[] v, float[] move, float[] frontv, float[] backv )
   {
     FloatBuffer lerp = vertexArrayBuf;
@@ -142,6 +144,9 @@ public class Mesh {
    * interpolates between two frames and origins
    * FIXME: batch lerp all vertexes
    */
+  
+  static ShortBuffer anotherIndirection = Lib.newShortBuffer(QuakeFiles.MAX_VERTS * 3);
+  
   static void GL_DrawAliasFrameLerp(QuakeFiles.dmdl_t paliashdr, float backlerp)
   {
     QuakeFiles.daliasframe_t frame = paliashdr.aliasFrames[GlState.currententity.frame];
@@ -239,6 +244,7 @@ public class Mesh {
     int count;
     int mode;
     int size = counts.length;
+    
     for (int j = 0; j < size; j++) {
       dstTextureCoords.limit(num_xyz * 2);
 
@@ -257,14 +263,10 @@ public class Mesh {
       srcIndex = pos << 1;
       srcIndex--;
 
-      int minIdx = 99999; 
       int maxIdx = 0;
 
       for (int k = 0; k < count; k++) {
         dstIndex = srcIndexBuf.get(k) << 1;
-        if (dstIndex < minIdx) {
-          minIdx = dstIndex;
-        } 
         if (dstIndex > maxIdx) {
           maxIdx = dstIndex;
         }
@@ -277,7 +279,7 @@ public class Mesh {
       dstTextureCoords.limit(maxIdx + 2);
       GlState.gl.glTexCoordPointer( 2, GL11.GL_FLOAT, 0, dstTextureCoords);
 
-      GlState.gl.glDrawElements(mode, srcIndexBuf.position(), srcIndexBuf.limit() - srcIndexBuf.position(), srcIndexBuf);
+      GlState.gl.glDrawElements(mode, srcIndexBuf.limit() - srcIndexBuf.position(), GL11.GL_UNSIGNED_SHORT, srcIndexBuf);
       pos += count;
     }
 
@@ -425,6 +427,9 @@ public class Mesh {
     GlState.gl.glVertexPointer(3, GL11.GL_FLOAT, 0, dstVertexCoords);
 
     pos = 0;
+    
+    int elementPos = 0;
+
     for (int j = 0; j < size; j++) {
       // get the vertex count and primitive type
       count = counts[j];
@@ -436,11 +441,41 @@ public class Mesh {
         mode = GL11.GL_TRIANGLE_FAN;
         count = -count;
       }
-      GlState.gl.glDrawArrays(mode, pos, count);
+
+      short idx0 = (short) pos;
+      short idx1 = (short) (pos + 1);
+      if (mode == GL11.GL_TRIANGLE_FAN) {
+        for (int i = 2; i < count; i++) {
+          short idx2 = (short) (pos + i);
+          anotherIndirection.put(elementPos++, idx0);
+          anotherIndirection.put(elementPos++, idx1);
+          anotherIndirection.put(elementPos++, idx2);
+          idx1 = idx2;
+        }
+      } else {
+        for (int i = 2; i < count; i++) {
+          short idx2 = (short) (pos + i);
+          anotherIndirection.put(elementPos++, idx0);
+          anotherIndirection.put(elementPos++, idx1);
+          anotherIndirection.put(elementPos++, idx2);
+          if (++i >= count) break;
+          short idx3 = (short) (pos + i);
+          anotherIndirection.put(elementPos++, idx2);
+          anotherIndirection.put(elementPos++, idx1);
+          anotherIndirection.put(elementPos++, idx3);
+          idx0 = idx2;
+          idx1 = idx3;
+        }
+      }
+      
+//      GlState.gl.glDrawArrays(mode, pos, count);
       pos += count;
     }
-
-
+    anotherIndirection.position(0);
+    anotherIndirection.limit(elementPos);
+    GlState.gl.glDrawElements(GL11.GL_TRIANGLES, elementPos, GL11.GL_UNSIGNED_SHORT, anotherIndirection);
+    anotherIndirection.limit(anotherIndirection.capacity());
+    
     // PMM - added double damage shell
     if ( (GlState.currententity.flags & ( Constants.RF_SHELL_RED | Constants.RF_SHELL_GREEN | Constants.RF_SHELL_BLUE | Constants.RF_SHELL_DOUBLE | Constants.RF_SHELL_HALF_DAM)) != 0 )
       GlState.gl.glEnable( GL11.GL_TEXTURE_2D );

@@ -974,6 +974,9 @@ public abstract class Images {
 
     
     static IntBuffer texnumBuffer;
+
+    public static Image skyTarget;
+    public static int skyOffset;
     
     static void init() {
 //      paletted_texture = gl.createByteBuffer(256*256);

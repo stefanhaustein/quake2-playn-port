@@ -862,8 +862,7 @@ public class GlRenderer implements Renderer {
     image.complete = true;
 
     Images.GL_Bind(image.texnum);
-    if (image.type == com.googlecode.playnquake.core.common.QuakeImage.it_pic || 
-        image.type == com.googlecode.playnquake.core.common.QuakeImage.it_sky) {
+    if (image.type == com.googlecode.playnquake.core.common.QuakeImage.it_pic) {
       PlayNQuake.tools().println("upload non-mipmap image " + image.name + ":" + image.width + "x" + image.height);
       GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP_TO_EDGE);
       GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP_TO_EDGE);
@@ -872,6 +871,21 @@ public class GlRenderer implements Renderer {
       image.playNImage.glTexImage2D(PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
       image.upload_width = image.width;
       image.upload_height = image.height;
+    } else if (image.type == com.googlecode.playnquake.core.common.QuakeImage.it_sky) {
+      PlayNQuake.tools().println("upload sky image " + image.name + ":" + image.width + "x" + image.height);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP_TO_EDGE);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP_TO_EDGE);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+      GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+      if (Images.skyTarget == null) Images.skyTarget = image;
+      Images.GL_Bind(Images.skyTarget.texnum);
+      if (Images.skyTarget.upload_width != 6 * image.width) {
+        PlayN.graphics().createImage(6 * image.width, image.height).glTexImage2D(
+            PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
+        Images.skyTarget.upload_width = 6 * image.width;
+      }
+      Images.skyTarget.upload_height = image.height;
+      image.playNImage.glTexSubImage2D(PlayN.graphics().gl20(), GL20.GL_TEXTURE_2D, 0, image.width * image.skyIndex, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE);
     } else {
       PlayNQuake.tools().println("upload mipmap image " + image.name + ":" + image.width + "x" + image.height);
       GlState.gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
