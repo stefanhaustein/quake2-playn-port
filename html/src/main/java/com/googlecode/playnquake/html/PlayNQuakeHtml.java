@@ -15,8 +15,10 @@ public class PlayNQuakeHtml extends HtmlGame {
   public void start() {
     
     
-    HtmlPlatform.Configuration config = new HtmlPlatform.Configuration();
+    HtmlPlatform.Config config = new HtmlPlatform.Config();
     config.experimentalFullscreen = true;
+    config.transparentCanvas = false;
+    config.mode = HtmlPlatform.Mode.WEBGL;
     HtmlPlatform platform = HtmlPlatform.register(config);
     final Tools tools = new GwtTools();
 

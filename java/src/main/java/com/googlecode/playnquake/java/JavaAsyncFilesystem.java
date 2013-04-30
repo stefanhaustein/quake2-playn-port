@@ -122,7 +122,7 @@ public class JavaAsyncFilesystem implements AsyncFilesystem{
       File soundFile = new File(root, location);
       byte[] soundData = new byte[(int) soundFile.length()];
       new DataInputStream(new FileInputStream(soundFile)).readFully(soundData);
-      return ((JavaAudio) PlayN.platform().audio()).createSound(location, new ByteArrayInputStream(soundData));
+      return ((JavaAudio) PlayN.platform().audio()).createSound(new ByteArrayInputStream(soundData), false);
     } catch (Exception e) {
       PlayN.platform().log().warn("Sound load error " + location + ": " + e);
       e.printStackTrace();

@@ -68,7 +68,7 @@ public class PlayNQuake implements Game {
    * Game initialization, after resources are loaded / converted.
    */
   void initGame() {
-    PlayN.graphics().setSize(800, 500);
+//    PlayN.graphics().setSize(800, 500);
     
     loadImageSizes();
     Globals.autojoin.value = 0;
@@ -108,12 +108,8 @@ public class PlayNQuake implements Game {
   
   
   @Override
-  public void update(float delta) {
+  public void tick(int alpha) {
     Globals.re.checkPendingImages();
-  }
-
-  @Override
-  public void paint(float alpha) {
     if (!initialized) {
       return;
     }
@@ -126,10 +122,4 @@ public class PlayNQuake implements Game {
       startTime = curTime;
     }
   }
-
-  @Override
-  public int updateRate() {
-    return 0;
-  }
-
 }

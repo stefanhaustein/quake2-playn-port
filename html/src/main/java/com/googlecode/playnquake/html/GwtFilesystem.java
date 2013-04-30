@@ -6,7 +6,7 @@ import playn.core.Image;
 import playn.core.PlayN;
 import playn.core.Sound;
 import playn.core.util.Callback;
-import playn.html.HtmlAssets;
+import playn.html.HtmlAudio;
 import playn.html.TypedArrayHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -271,13 +271,13 @@ public class GwtFilesystem implements AsyncFilesystem{
   @Override
   public Image getImage(String name) {
     String url = getFileSystem().getRoot().toURL() + name;
-    return ((HtmlAssets) PlayN.assets()).adaptImage(url);
+    return PlayN.assets().getRemoteImage(url);
   }
 
   @Override
   public Sound getSound(String location) {
     String url = getFileSystem().getRoot().toURL() + location;
-    return ((HtmlAssets) PlayN.assets()).adaptSound(url);
+    return ((HtmlAudio) PlayN.audio()).createSound(url);
   }
 
 }

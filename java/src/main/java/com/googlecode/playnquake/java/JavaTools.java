@@ -27,7 +27,7 @@ public class JavaTools implements Tools {
     JavaImage javaImage = (JavaImage) image;
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
-      ImageIO.write(javaImage.img, "PNG", baos);
+      ImageIO.write(javaImage.bufferedImage(), "PNG", baos);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

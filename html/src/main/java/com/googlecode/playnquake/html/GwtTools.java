@@ -3,7 +3,7 @@ package com.googlecode.playnquake.html;
 import java.nio.ByteBuffer;
 
 import playn.core.CanvasImage;
-import playn.html.HtmlCanvas;
+import playn.html.HtmlImage;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -14,6 +14,8 @@ import com.google.gwt.typedarrays.shared.Int8Array;
 import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.googlecode.playnquake.core.tools.AsyncFilesystem;
 import com.googlecode.playnquake.core.tools.Tools;
+
+import elemental.html.CanvasElement;
 
 public class GwtTools implements Tools {
   static Int8Array wba = TypedArrays.createInt8Array(8);
@@ -34,8 +36,9 @@ public class GwtTools implements Tools {
   
   @Override
   public ByteBuffer convertToPng(CanvasImage image) {
-    HtmlCanvas htmlCanvas = (HtmlCanvas) image.canvas();
-    String data = htmlCanvas.toDataUrl();
+	
+    CanvasElement canvasElement = (CanvasElement) ((HtmlImage) image).imageElement();
+    String data = canvasElement.toDataURL(null);
     int cut = data.indexOf(',');
     String decoded = atob(data.substring(cut + 1));
     ByteBuffer buf = ByteBuffer.allocate(decoded.length());
