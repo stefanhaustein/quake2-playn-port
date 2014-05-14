@@ -20,6 +20,9 @@
   </head>
   <body style="background-color:#000;color:#ddd;border:0;margin:0;padding:0">
     <div id="splash" style="margin:20px">
+      <div style="float:right"><a href="http://www.w3.org/html/logo/">
+<img src="http://www.w3.org/html/logo/badge/html5-badge-h-graphics-multimedia-storage.png" width="197" height="64" alt="HTML5 Powered with Graphics, 3D &amp; Effects, Multimedia, and Offline &amp; Storage" title="HTML5 Powered with Graphics, 3D &amp; Effects, Multimedia, and Offline &amp; Storage">
+</a></div>
       <tt>PlayN Quake II Demo Port.<br><br>
 Tested in Google Chrome 26; if this does not start in your browse, try Chrome.<br>
 If you have a zip.js patch for Firefox, let us know!<br>
@@ -32,8 +35,10 @@ Download Quake II Resources (via CORS) from:<br>
 </pre><div id="log-bottom"></div>
     </div>
     <div style="margin-left: auto;
-  margin-right: auto; width:800px;height:500px" id='playn-root'></div>
-    <script src="zip.js"></script>
+  margin-right: auto; width:800px;height:500px;visibility:hidden" id='playn-root'></div>
+    <script src="lib/zip.js"></script>
+    <script src="lib/zip-ext.js"></script>
+    <script src="lib/inflate.js"></script>
     <script src="download.js"></script>
     <script src="PlayNQuake/PlayNQuake.nocache.js"></script>
   </body>

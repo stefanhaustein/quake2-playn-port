@@ -1,11 +1,36 @@
+var time = new Date().getTime();
+
+window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+
+println("");
+zip.useWebWorkers = false;
+
+var FS_SIZE = 200 * 1024 * 1024;
+
+if (!window.requestFileSystem) {
+   println("File System not available; try this demo with Google Chrome or a different browser with full HTML5 support.");
+} else {
+   println("Initialing file system. Requesting user permission for 200M persistent memory.");
+   window.requestFileSystem(PERSISTENT, FS_SIZE, onInitFs,
+     function(msg) {
+       println("Persistent memory denied. Using temporary memory.");
+       window.requestFileSystem(TEMPORARY, 100*1024*1024, onInitFs, 
+         function(msg) {
+           error("Error requesting temporary storage: " + msg);
+         }
+       );
+     });
+}
+
+
 function println(s) {
-  document.getElementById("log").innerText += s +"\n";
+  document.getElementById("log").textContent += s +"\n";
   document.getElementById("log-bottom").scrollIntoView();
 }
 
 function backspace(cnt, s) {
-  text = document.getElementById("log").innerText;
-  document.getElementById("log").innerText = text.substring(0, text.length - cnt) + s +"\n";
+  text = document.getElementById("log").textContent;
+  document.getElementById("log").textContent = text.substring(0, text.length - cnt) + s +"\n";
 }
 
 function error(msg) {
@@ -15,37 +40,6 @@ function error(msg) {
 function fsErrorHandler(msg) {
   println("ERROR: " + msg);
 }
-
-window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-
-println("");
-
-window.storageInfo = window.storageInfo || window.mozStorageInfo || window.webkitStorageInfo;
-
-if (!window.storageInfo) {
-   println("File System not available.");
-   println("Try this demo with Google Chrome or a different browser with full HTML5 support.")
-} else {
-   println("Initialing file system. Requesting user permission for 200M persistent memory.");
-}
-
-window.storageInfo.requestQuota(PERSISTENT, 200*1024*1024, 
-  function(grantedBytes) {
-    window.requestFileSystem(PERSISTENT, grantedBytes, onInitFs, 
-      function(msg) {
-        error("Error requesting persistent storage: " + msg);
-      }
-    );
-  }, 
-  function() {
-    println("Persistent memory denied. Using temporary memory.");
-    window.requestFileSystem(TEMPORARY, 100*1024*1024, onInitFs, 
-      function(msg) {
-        error("Error requesting temporary storage: " + msg);
-      }
-    );
-  }
-);
 
 function done() {
   // Fix active waiting!
@@ -69,19 +63,23 @@ function onInitFs(fileSystem) {
 }
 
 function downloadAndUnpack() {
+  if (!window.requestFileSystem) {
+     error("File System not available; try this demo with Google Chrome or a different browser with full HTML5 support.");
+     return;
+  }
+
   var url = document.getElementById('source_url').value;
   println("Donwloading and inflating " + url);
-  zip.createReader(new zip.HttpReader(url), function(reader) {
-  reader.getEntries(function(entries) {
-    processZipEntries(entries, 0);
+  zip.createReader(new zip.HttpReader(url), function(reader) { 
+    println("Created ZIP reader, getting entries");
+    reader.getEntries(function(entries) {
+      processZipEntries(entries, 0);
     }); // getEntries
   }, function(msg) {
     error("Creating a ZIP reader failed: " + msg);
   });
 }
 
-
-var time = new Date().getTime();
 
 function processZipEntries(entries, startIndex) {
   if (startIndex >= entries.length) {
@@ -90,11 +88,12 @@ function processZipEntries(entries, startIndex) {
     return;
   }
   var entry = entries[startIndex];
+  var fileName = entry.filename;
   if (entry.directory) {
+    println("Processing directory " + fileName);
     processZipEntries(entries, startIndex + 1)
   }
-  var fileName = entry.filename;
-  println("Unpacking: " + fileName + " ...    ");
+  println("Unpacking: " + startIndex + "/" + entries.length + ": " + fileName + " ...    ");
 
   createQuakeFile(fileName, function(fileEntry) {
     entry.getData(new zip.FileWriter(fileEntry), function() {
@@ -114,7 +113,7 @@ function processZipEntries(entries, startIndex) {
 }
 
 function createQuakeFile(fileName, callback) {
-  var parts = fileName.split("/");
+  var parts = fileName.toLowerCase().split("/");
   createFileImpl(quakeFileSystem.root, parts, 0, callback);
 }
 
@@ -129,56 +128,3 @@ function createFileImpl(root, parts, index, callback) {
 }
 
 
-
-    // // get first entry content as blob
-    // entries[0].getData(new zip.BlobWriter(), function(blob) {
-    // console.log(text);
-    // // close the zip reader
-    //  reader.close(function() {
-    //          // onclose callback
-    //       });
-
-    //      }, function(current, total) {
-    //        // onprogress callback
-    //      });
-
-
-/*
-println("Starting Downloader.");
-
-var req = new XMLHttpRequest();
- 
-req.addEventListener("progress", updateProgress, false);
-req.addEventListener("load", transferComplete, false);
-req.addEventListener("error", transferFailed, false);
-req.addEventListener("abort", transferCanceled, false);
- 
-println("Listeners registered");
-
-req.open("GET", "id/q2-314-demo-x86.exe", true);
-req.responseType = "arraybuffer";
-req.send();
-
-println("Request opened. Type = 'arraybuffer'");
-
-function updateProgress(evt) {
-  if (evt.lengthComputable) {
-    var percentComplete = evt.loaded / evt.total;
-    println("Percent: " + percentComplete);
-  } else {
-    println("Unknown Progress...")
-  }
-}
- 
-function transferComplete(evt) {
-  println("The transfer is complete.");
-}
-
-function transferFailed(evt) {
-  println("An error occurred while transferring the file.");
-}
-	 
-function transferCanceled(evt) {
-  alert("The transfer has been canceled by the user.");
-}
-*/

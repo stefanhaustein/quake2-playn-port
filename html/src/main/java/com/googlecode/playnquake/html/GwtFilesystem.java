@@ -10,6 +10,7 @@ import playn.html.HtmlAudio;
 import playn.html.TypedArrayHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
 import com.google.gwt.typedarrays.shared.ArrayBufferView;
 import com.google.gwt.typedarrays.shared.TypedArrays;
@@ -222,13 +223,13 @@ public class GwtFilesystem implements AsyncFilesystem{
     
     reader.readEntries(new EntriesCallback() {
       @Override
-      public boolean onEntriesCallback(EntryArray entries) {
-        if (entries.getLength() == 0) {
+      public boolean handleEvent(JsArray<JavaScriptObject> entries) {
+        if (entries.length() == 0) {
           // This assumes that all process callbacks are sync, which they are not. This should really recurse here to avoid this issue.
           countingCallback.onSuccess(null);
         } else {
-          for (int i = 0; i < entries.getLength(); i++) {
-            elemental.html.Entry entry = entries.item(i);
+          for (int i = 0; i < entries.length(); i++) {
+            elemental.html.Entry entry = (elemental.html.Entry) entries.get(i);
             if (entry.isDirectory()) {
               processFiles((DirectoryEntry) entry, processCallback, countingCallback.addAccess());
             } else {

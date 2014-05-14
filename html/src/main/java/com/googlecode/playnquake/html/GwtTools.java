@@ -7,6 +7,8 @@ import playn.html.HtmlImage;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.typedarrays.shared.Float32Array;
 import com.google.gwt.typedarrays.shared.Float64Array;
 import com.google.gwt.typedarrays.shared.Int32Array;
@@ -14,6 +16,7 @@ import com.google.gwt.typedarrays.shared.Int8Array;
 import com.google.gwt.typedarrays.shared.TypedArrays;
 import com.googlecode.playnquake.core.tools.AsyncFilesystem;
 import com.googlecode.playnquake.core.tools.Tools;
+import com.ibm.icu.text.DisplayContext;
 
 import elemental.html.CanvasElement;
 
@@ -79,6 +82,7 @@ public class GwtTools implements Tools {
   public void prparationsDone() {
     Element log = Document.get().getElementById("splash");
     Document.get().getBody().removeChild(log);
+    Document.get().getElementById("playn-root").getStyle().setVisibility(Visibility.VISIBLE);
   }
 
 }

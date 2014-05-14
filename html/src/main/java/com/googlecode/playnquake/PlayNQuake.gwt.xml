@@ -17,7 +17,8 @@
   <inherits name='playn.GL11Emulation'/>
   <inherits name='playn.PlayN'/>
   <inherits name="elemental.Elemental"/>
-
+  <inherits name="elemental.ElementalFix"/>
+  
 <!--
   <set-property name="compiler.stackMode" value="emulated" />
   <set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true" />
