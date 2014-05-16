@@ -23,19 +23,29 @@
       <div style="float:right"><a href="http://www.w3.org/html/logo/">
 <img src="http://www.w3.org/html/logo/badge/html5-badge-h-graphics-multimedia-storage.png" width="197" height="64" alt="HTML5 Powered with Graphics, 3D &amp; Effects, Multimedia, and Offline &amp; Storage" title="HTML5 Powered with Graphics, 3D &amp; Effects, Multimedia, and Offline &amp; Storage">
 </a></div>
-      <tt>PlayN Quake II Demo Port.<br><br>
-Tested in Google Chrome 26; if this does not start in your browse, try Chrome.<br>
-If you have a zip.js patch for Firefox, let us know!<br>
-Source code location: <a style="color:#ddd" href="https://code.google.com/p/quake2-playn-port/">code.google.com/p/quake2-playn-port</a><br>
+      <tt><a href='https://code.google.com/p/playn/' style="color:#ddd">PlayN</a> Quake II Demo Port.<br><br>
+This currently works only in Google Chrome, which is the only browser with support for the
+FileSystem API.<br><br>We'd <em>love</em> to use IndexedDb and support FireFox, but we need
+<a style="color:#ddd" href="http://lists.w3.org/Archives/Public/public-webapps/2013JulSep/0081.html">URL access to the stored data</a> (<a style="color:#ddd" href="https://plus.google.com/103079366341809665805/posts/MeN6DUY9vqL">explanation</a>). 
 <br>
+So we'll add support when the corresponding proposal is implemented.
+<br>
+<br>
+Source code location: <a style="color:#ddd" href="https://code.google.com/p/quake2-playn-port/">code.google.com/p/quake2-playn-port</a><br>
+<br></tt>
+<div id="download_dialog" style="display:none">
+<tt>
 Download Quake II Resources (via CORS) from:<br>
-</tt> <input id="source_url" size="100" value="http://commondatastorage.googleapis.com/quake2demo/q2-314-demo-x86.exe"> 
-       <input id="download_button" type="button" value="Start" onclick="this.disabled=true; downloadAndUnpack()"><br>
+</tt>
+ <input id="source_url" size="100" value="http://commondatastorage.googleapis.com/quake2demo/q2-314-demo-x86.exe"> 
+ <input id="download_button" type="button" value="Start" onclick="this.disabled=true; downloadAndUnpack()"><br>
+</div>
 <pre id="log">
 </pre><div id="log-bottom"></div>
     </div>
     <div style="margin-left: auto;
   margin-right: auto; width:800px;height:500px;visibility:hidden" id='playn-root'></div>
+    <script src="lib/idb.filesystem.js"></script>
     <script src="lib/zip.js"></script>
     <script src="lib/zip-ext.js"></script>
     <script src="lib/inflate.js"></script>

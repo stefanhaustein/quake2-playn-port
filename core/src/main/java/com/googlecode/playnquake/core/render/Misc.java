@@ -193,7 +193,7 @@ public class Misc {
 			att_buffer.put(1,GlConfig.gl_particle_att_b.value);
 			att_buffer.put(2,GlConfig.gl_particle_att_c.value);
 			
-			GlState.gl.glEnable( GL11.GL_POINT_SMOOTH );
+		//	GlState.gl.glEnable( GL11.GL_POINT_SMOOTH );
 			GlState.gl.glPointParameterf(GL11.GL_POINT_SIZE_MIN, GlConfig.gl_particle_min_size.value );
 			GlState.gl.glPointParameterf( GL11.GL_POINT_SIZE_MAX, GlConfig.gl_particle_max_size.value );
 			System.out.println("  gl.glPointParameter( GLAdapter.GL_DISTANCE_ATTENUATION, att_buffer );");

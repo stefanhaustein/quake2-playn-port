@@ -172,6 +172,7 @@ public class GwtFilesystem implements AsyncFilesystem{
     rootDirEntry.getDirectory(dir, CREATE, new EntryCallback() {
       @Override
       public boolean onEntryCallback(elemental.html.Entry entry) {
+        log("calling createDirs recursively");
         createDirs((DirectoryEntry) entry, remainder, callback);
         return true;
       }
@@ -184,6 +185,7 @@ public class GwtFilesystem implements AsyncFilesystem{
       final Callback<Void> callback) {
 
     final int cut = filename.lastIndexOf('/');
+    log("calling createDirs from saveFile: " + filename);
     createDirs(getFileSystem().getRoot(), cut == -1 ? "" : filename.substring(0, cut), new Callback<DirectoryEntry>() {
       @Override
       public void onSuccess(DirectoryEntry dir) {

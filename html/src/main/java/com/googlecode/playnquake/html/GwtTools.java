@@ -56,7 +56,7 @@ public class GwtTools implements Tools {
     $wnd.console.log(text);
     var log = $doc.getElementById("log");
     if (log) {
-      log.innerText += text +"\n"
+      log.textContent += text +"\n"
       $doc.getElementById("log-bottom").scrollIntoView();
     }
   }-*/;
