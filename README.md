@@ -1,6 +1,8 @@
 # quake2-playn-port
 
-Demo: http://quake2playn.appspot.com/
+Demo: http://quake2playn.appspot.com/ 
+
+- You may need to change the download link in the input field from http: to https:, as pointed out in issue #1. Ill fix this when I get a chance.
 
 Our original April 1st 2010 Video: https://www.youtube.com/watch?v=XhMN0wlITLk
 
