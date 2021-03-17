@@ -35,7 +35,7 @@ function downloadAndUnpack() {
   }
 
   var url = document.getElementById('source_url').value;
-  println("Donwloading and inflating " + url);
+  println("Donwloading and inflating");
   zip.createReader(new zip.HttpReader(url), function(reader) { 
     println("Created ZIP reader, getting entries");
     reader.getEntries(function(zipEntries) {
@@ -161,7 +161,7 @@ window.requestFileSystem  = window.requestFileSystem ||
     window.webkitRequestFileSystem;
 
 // If we can ask for persistent storage, do so.
-if (window.webkitStorageInfo) {
+if (navigator.webkitTemporaryStorage) {
   println("Quota API available. Asking for persistent storage.");
   println("If a browser dialog appears at the top of the screen, please confirm.");
   window.webkitStorageInfo.requestQuota(
