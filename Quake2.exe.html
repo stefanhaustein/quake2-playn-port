@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Play Quake II Demo</title>
+  </head>
+  <body style="background-color:#000;color:#ddd;border:0;margin:0;padding:0">
+    <div id="splash" style="margin:20px">
+      <tt><a href='' style="color:#ddd">Play</a> Quake II Demo.<br><br>
+This currently works only in Google Chrome, which is the only browser with support for the
+FileSystem API.<br><br>We'd <em>love</em> to use IndexedDb and support FireFox, but we need
+<a style="color:#ddd" href="http://lists.w3.org/Archives/Public/public-webapps/2013JulSep/0081.html">URL access to the stored data</a> (<a style="color:#ddd" href="https://plus.google.com/103079366341809665805/posts/MeN6DUY9vqL">explanation</a>). 
+<br>
+So we'll add support when the corresponding proposal is implemented.
+<br>
+<br>
+
+<br></tt>
+<div id="download_dialog" style="display:none">
+<tt>
+Play Quake II Demo:<br>
+</tt>
+ <input type="hidden" id="source_url" size="100" value="https://adamtrex.azurewebsites.net/Games/Classic_PC/98/Programs/MS-DOS/ID-Games/Quake_2/q2-314-demo-x86.exe"> 
+ <input id="download_button" type="button" value="Start" onclick="this.disabled=true; downloadAndUnpack()"><br>
+</div>
+<pre id="log">
+</pre><div id="log-bottom"></div>
+    </div>
+    <div style="margin-left: auto;
+  margin-right: auto; width:800px;height:500px;visibility:hidden" id='playn-root'></div>
+    <script src="lib/idb.filesystem.js"></script>
+    <script src="lib/zip.js"></script>
+    <script src="lib/zip-ext.js"></script>
+    <script src="lib/inflate.js"></script>
+    <script src="download.js"></script>
+    <script src="PlayNQuake/PlayNQuake.nocache.js"></script>
+  </body>
+</html>
+
+<!--<script type="text/javascript">
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
+document.onkeydown = function(e) {
+  if(event.keyCode == 123) {
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+     return false;
+  }
+  if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+     return false;
+  }
+}
+</script>
