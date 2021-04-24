@@ -1,4 +1,0 @@
-<module>
-  <inherits name="elemental.Elemental"/>
-  <source path="html" />
-</module>
