@@ -6,7 +6,7 @@ All credit goes to the original source port creators: https://github.com/stefanh
 
 I just made this work
 
-So here is the first thing you need to do is to get the Playn Quake 2 Demo repo from here: https://github.com/MagnusMarx/quake2-playn-port/archive/refs/heads/master.zip
+So here is the first thing you need to do is to get the Playn Quake 2 Demo repo from here: https://github.com/MagnusMarx/Quake2-PlayN-MagnusPort/archive/refs/heads/master.zip
 
 Next you will need to download the demo exe file from here: https://commondatastorage.googleapis.com/quake2demo/q2-314-demo-x86.exe
 
