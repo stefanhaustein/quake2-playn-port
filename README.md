@@ -16,7 +16,7 @@ Then, where the game shows this link: http://commondatastorage.googleapis.com/qu
 
 replace it with the location on the website where you stored the .exe file
 
-so instead, it would say something like: https://[your website here]/quake2demo.exe
+so instead, it would say something like: https://[your website here]/q2-314-demo-x86.exe
 
 If you have anymore questions, don't hesitate to contact me and my team at magnusteam.contact@gmail.com
 
