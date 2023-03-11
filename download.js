@@ -35,6 +35,7 @@ function downloadAndUnpack() {
   }
 
   var url = document.getElementById('source_url').value;
+  // println("Donwloading and inflating " + url);
   println("Donwloading and inflating");
   zip.createReader(new zip.HttpReader(url), function(reader) { 
     println("Created ZIP reader, getting entries");
@@ -138,7 +139,7 @@ function onInitFs(fileSystem) {
   window.quakeFileSystem.root.getFile("splash/wav/btnx.wav", {},
     function() {
       println("Files downloaded and unpacked already.");
-      done();
+      done();    
       // document.getElementById("download_dialog").style.display = "block";
     },
     function() {
@@ -161,7 +162,7 @@ window.requestFileSystem  = window.requestFileSystem ||
     window.webkitRequestFileSystem;
 
 // If we can ask for persistent storage, do so.
-if (navigator.webkitTemporaryStorage) {
+if (window.webkitStorageInfo) {
   println("Quota API available. Asking for persistent storage.");
   println("If a browser dialog appears at the top of the screen, please confirm.");
   window.webkitStorageInfo.requestQuota(

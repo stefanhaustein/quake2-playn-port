@@ -1,48 +1,48 @@
-function PlayNQuake(){
-  var $wnd_0 = window, $doc_0 = document, $stats = $wnd_0.__gwtStatsEvent?function(a){
+function PlayNQuake() {
+  var $wnd_0 = window, $doc_0 = document, $stats = $wnd_0.__gwtStatsEvent ? function (a) {
     return $wnd_0.__gwtStatsEvent(a);
   }
-  :null, $sessionId_0 = $wnd_0.__gwtStatsSessionId?$wnd_0.__gwtStatsSessionId:null, scriptsDone, loadDone, bodyDone, base = '', metaProps = {}, values = [], providers = [], answers = [], softPermutationId = 0, onLoadErrorFunc, propertyErrorFunc;
-  $stats && $stats({moduleName:'PlayNQuake', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'begin'});
+    : null, $sessionId_0 = $wnd_0.__gwtStatsSessionId ? $wnd_0.__gwtStatsSessionId : null, scriptsDone, loadDone, bodyDone, base = '', metaProps = {}, values = [], providers = [], answers = [], softPermutationId = 0, onLoadErrorFunc, propertyErrorFunc;
+  $stats && $stats({ moduleName: 'PlayNQuake', sessionId: $sessionId_0, subSystem: 'startup', evtGroup: 'bootstrap', millis: (new Date).getTime(), type: 'begin' });
   if (!$wnd_0.__gwt_stylesLoaded) {
     $wnd_0.__gwt_stylesLoaded = {};
   }
   if (!$wnd_0.__gwt_scriptsLoaded) {
     $wnd_0.__gwt_scriptsLoaded = {};
   }
-  function isHostedMode(){
+  function isHostedMode() {
     var result = false;
     try {
       var query = $wnd_0.location.search;
       return (query.indexOf('gwt.codesvr=') != -1 || (query.indexOf('gwt.hosted=') != -1 || $wnd_0.external && $wnd_0.external.gwtOnLoad)) && query.indexOf('gwt.hybrid') == -1;
     }
-     catch (e) {
+    catch (e) {
     }
-    isHostedMode = function(){
+    isHostedMode = function () {
       return result;
     }
-    ;
+      ;
     return result;
   }
 
-  function maybeStartModule(){
+  function maybeStartModule() {
     if (scriptsDone && loadDone) {
       var iframe = $doc_0.getElementById('PlayNQuake');
       var frameWnd = iframe.contentWindow;
       if (isHostedMode()) {
-        frameWnd.__gwt_getProperty = function(name_0){
+        frameWnd.__gwt_getProperty = function (name_0) {
           return computePropValue(name_0);
         }
-        ;
+          ;
       }
       PlayNQuake = null;
       frameWnd.gwtOnLoad(onLoadErrorFunc, 'PlayNQuake', base, softPermutationId);
-      $stats && $stats({moduleName:'PlayNQuake', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date).getTime(), type:'end'});
+      $stats && $stats({ moduleName: 'PlayNQuake', sessionId: $sessionId_0, subSystem: 'startup', evtGroup: 'moduleStartup', millis: (new Date).getTime(), type: 'end' });
     }
   }
 
-  function computeScriptBase(){
-    function getDirectoryOfFile(path){
+  function computeScriptBase() {
+    function getDirectoryOfFile(path) {
       var hashIndex = path.lastIndexOf('#');
       if (hashIndex == -1) {
         hashIndex = path.length;
@@ -52,13 +52,13 @@ function PlayNQuake(){
         queryIndex = path.length;
       }
       var slashIndex = path.lastIndexOf('/', Math.min(queryIndex, hashIndex));
-      return slashIndex >= 0?path.substring(0, slashIndex + 1):'';
+      return slashIndex >= 0 ? path.substring(0, slashIndex + 1) : '';
     }
 
-    function ensureAbsoluteUrl(url_0){
+    function ensureAbsoluteUrl(url_0) {
       if (url_0.match(/^\w+:\/\//)) {
       }
-       else {
+      else {
         var img = $doc_0.createElement('img');
         img.src = url_0 + 'clear.cache.gif';
         url_0 = getDirectoryOfFile(img.src);
@@ -66,7 +66,7 @@ function PlayNQuake(){
       return url_0;
     }
 
-    function tryMetaTag(){
+    function tryMetaTag() {
       var metaVal = __gwt_getMetaProperty('baseUrl');
       if (metaVal != null) {
         return metaVal;
@@ -74,7 +74,7 @@ function PlayNQuake(){
       return '';
     }
 
-    function tryNocacheJsTag(){
+    function tryNocacheJsTag() {
       var scriptTags = $doc_0.getElementsByTagName('script');
       for (var i = 0; i < scriptTags.length; ++i) {
         if (scriptTags[i].src.indexOf('PlayNQuake.nocache.js') != -1) {
@@ -84,7 +84,7 @@ function PlayNQuake(){
       return '';
     }
 
-    function tryMarkerScript(){
+    function tryMarkerScript() {
       var thisScript;
       if (typeof isBodyLoaded == 'undefined' || !isBodyLoaded()) {
         var markerId = '__gwt_marker_PlayNQuake';
@@ -105,7 +105,7 @@ function PlayNQuake(){
       return '';
     }
 
-    function tryBaseTag(){
+    function tryBaseTag() {
       var baseElements = $doc_0.getElementsByTagName('base');
       if (baseElements.length > 0) {
         return baseElements[baseElements.length - 1].href;
@@ -113,7 +113,7 @@ function PlayNQuake(){
       return '';
     }
 
-    function isLocationOk(){
+    function isLocationOk() {
       var loc = $doc_0.location;
       return loc.href == loc.protocol + '//' + loc.host + loc.pathname + loc.search + loc.hash;
     }
@@ -136,7 +136,7 @@ function PlayNQuake(){
     return tempBase;
   }
 
-  function processMetas(){
+  function processMetas() {
     var metas = document.getElementsByTagName('meta');
     for (var i = 0, n = metas.length; i < n; ++i) {
       var meta = metas[i], name_0 = meta.getAttribute('name'), content_0;
@@ -153,31 +153,31 @@ function PlayNQuake(){
               name_0 = content_0.substring(0, eq);
               value_0 = content_0.substring(eq + 1);
             }
-             else {
+            else {
               name_0 = content_0;
               value_0 = '';
             }
             metaProps[name_0] = value_0;
           }
         }
-         else if (name_0 == 'gwt:onPropertyErrorFn') {
+        else if (name_0 == 'gwt:onPropertyErrorFn') {
           content_0 = meta.getAttribute('content');
           if (content_0) {
             try {
               propertyErrorFunc = eval(content_0);
             }
-             catch (e) {
+            catch (e) {
               alert('Bad handler "' + content_0 + '" for "gwt:onPropertyErrorFn"');
             }
           }
         }
-         else if (name_0 == 'gwt:onLoadErrorFn') {
+        else if (name_0 == 'gwt:onLoadErrorFn') {
           content_0 = meta.getAttribute('content');
           if (content_0) {
             try {
               onLoadErrorFunc = eval(content_0);
             }
-             catch (e) {
+            catch (e) {
               alert('Bad handler "' + content_0 + '" for "gwt:onLoadErrorFn"');
             }
           }
@@ -186,12 +186,12 @@ function PlayNQuake(){
     }
   }
 
-  function __gwt_getMetaProperty(name_0){
+  function __gwt_getMetaProperty(name_0) {
     var value_0 = metaProps[name_0];
-    return value_0 == null?null:value_0;
+    return value_0 == null ? null : value_0;
   }
 
-  function computePropValue(propName){
+  function computePropValue(propName) {
     var value_0 = providers[propName](), allowedValuesMap = values[propName];
     if (value_0 in allowedValuesMap) {
       return value_0;
@@ -207,7 +207,7 @@ function PlayNQuake(){
   }
 
   var frameInjected;
-  function maybeInjectFrame(){
+  function maybeInjectFrame() {
     if (!frameInjected) {
       frameInjected = true;
       var iframe = $doc_0.createElement('iframe');
@@ -216,24 +216,24 @@ function PlayNQuake(){
       iframe.style.cssText = 'position:absolute;width:0;height:0;border:none';
       iframe.tabIndex = -1;
       $doc_0.body.appendChild(iframe);
-      $stats && $stats({moduleName:'PlayNQuake', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date).getTime(), type:'moduleRequested'});
+      $stats && $stats({ moduleName: 'PlayNQuake', sessionId: $sessionId_0, subSystem: 'startup', evtGroup: 'moduleStartup', millis: (new Date).getTime(), type: 'moduleRequested' });
       iframe.contentWindow.location.replace(base + initialHtml);
     }
   }
 
-  PlayNQuake.onScriptLoad = function(){
+  PlayNQuake.onScriptLoad = function () {
     if (frameInjected) {
       loadDone = true;
       maybeStartModule();
     }
   }
-  ;
-  PlayNQuake.onInjectionDone = function(){
+    ;
+  PlayNQuake.onInjectionDone = function () {
     scriptsDone = true;
-    $stats && $stats({moduleName:'PlayNQuake', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'loadExternalRefs', millis:(new Date).getTime(), type:'end'});
+    $stats && $stats({ moduleName: 'PlayNQuake', sessionId: $sessionId_0, subSystem: 'startup', evtGroup: 'loadExternalRefs', millis: (new Date).getTime(), type: 'end' });
     maybeStartModule();
   }
-  ;
+    ;
   processMetas();
   computeScriptBase();
   var strongName;
@@ -246,7 +246,7 @@ function PlayNQuake(){
     initialHtml = 'hosted.html?PlayNQuake';
     strongName = '';
   }
-  $stats && $stats({moduleName:'PlayNQuake', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'selectingPermutation'});
+  $stats && $stats({ moduleName: 'PlayNQuake', sessionId: $sessionId_0, subSystem: 'startup', evtGroup: 'bootstrap', millis: (new Date).getTime(), type: 'selectingPermutation' });
   if (!isHostedMode()) {
     try {
       strongName = 'E635C924D74AFB6527B814C542FC5B1C';
@@ -257,12 +257,12 @@ function PlayNQuake(){
       }
       initialHtml = strongName + '.cache.html';
     }
-     catch (e) {
+    catch (e) {
       return;
     }
   }
   var onBodyDoneTimerId;
-  function onBodyDone(){
+  function onBodyDone() {
     if (!bodyDone) {
       bodyDone = true;
       maybeStartModule();
@@ -276,21 +276,21 @@ function PlayNQuake(){
   }
 
   if ($doc_0.addEventListener) {
-    $doc_0.addEventListener('DOMContentLoaded', function(){
+    $doc_0.addEventListener('DOMContentLoaded', function () {
       maybeInjectFrame();
       onBodyDone();
     }
-    , false);
+      , false);
   }
-  var onBodyDoneTimerId = setInterval(function(){
+  var onBodyDoneTimerId = setInterval(function () {
     if (/loaded|complete/.test($doc_0.readyState)) {
       maybeInjectFrame();
       onBodyDone();
     }
   }
-  , 50);
-  $stats && $stats({moduleName:'PlayNQuake', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'end'});
-  $stats && $stats({moduleName:'PlayNQuake', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'loadExternalRefs', millis:(new Date).getTime(), type:'begin'});
+    , 50);
+  $stats && $stats({ moduleName: 'PlayNQuake', sessionId: $sessionId_0, subSystem: 'startup', evtGroup: 'bootstrap', millis: (new Date).getTime(), type: 'end' });
+  $stats && $stats({ moduleName: 'PlayNQuake', sessionId: $sessionId_0, subSystem: 'startup', evtGroup: 'loadExternalRefs', millis: (new Date).getTime(), type: 'begin' });
   $doc_0.write('<script defer="defer">PlayNQuake.onInjectionDone(\'PlayNQuake\')<\/script>');
 }
 

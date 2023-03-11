@@ -1,36 +1,44 @@
-I DID NOT MAKE THIS!!!
+Live Demo: https://adamtrex.azurewebsites.net/index.html
 
-Demo: https://adamtrex.azurewebsites.net/Games/Classic_PC/98/programs/MS-DOS/ID-Games/quake_2/quake2.exe.html
+Partial credit goes to the original source port creators: https://github.com/stefanhaustein/quake2-playn-port
 
-All credit goes to the original source port creators: https://github.com/stefanhaustein/quake2-playn-port
+Welcome to the home of the worlds first FULL VERSION of Quake II running on the web!
 
-I just made this work
+This, unlike every other port, runs the PC files, and isn't an emulation of Quake II for the N64.
 
-So here is the first thing you need to do is to get the Playn Quake 2 Demo repo from here: https://github.com/MagnusMarx/Quake2-PlayN-MagnusPort/archive/refs/heads/master.zip
+This project was first started by Stefan Haustein and worked for a little while until at some point in time it broke.
 
-Next you will need to download the demo exe file from here: https://commondatastorage.googleapis.com/quake2demo/q2-314-demo-x86.exe
+Later Magnus fixed it, and since that moment, Magnus wasn't able to figure out how to make a full port.
 
-Upload the .exe file and source port to your website because this is the only way for this to work.
+One morning, on 12/21/2022 @ 12pm Magnus had an itch.He dug deeper and deeper into this seemingly endless rabbit hole.
 
-Then, where the game shows this link: http://commondatastorage.googleapis.com/quake2demo/q2-314-demo-x86.exe
+Most of his work had nothing to do with code, it was simply getting the files in order.
 
-replace it with the location on the website where you stored the .exe file
+Thus the birth of the PlayN-Quake-II-Magnus-Port.
 
-so instead, it would say something like: https://[your website here]/q2-314-demo-x86.exe
+**MAGNUS HAS LEGALLY BOUGHT QUAKE 2, THIS PROJECT IS FOR EDUCATIONAL PURPOSES ONLY!**
 
-If you have anymore questions, don't hesitate to contact me and my team at magnusteam.contact@gmail.com
+For the more avid readers, here is a more indepth look at the additions Magnus made:
 
-Thx!
+> [^1] The original source code was added to the project.
 
-Magnus Marks
+> [^2] Magnus created download.js.
 
+> [^3] Magnus created PlayNQuake folder adding the following:
+- E635C924D74AFB6527B814C542FC5B1C.cache.html (correcting audio issues, setting initial spawn map, enabling save and load states).
+- PlayNQuake.nocache.js.
 
-# quake2-playn-port
+> [^4] Magnus edited original HTML file.
 
-Demo: http://quake2playn.appspot.com/ 
+> [^5] Magnus has done the following with the Quake2.EXE file:
+- Deleted all unnecessary files.
+- Added Quake 2 game assets.
+- Edited config file to better suit usage hosted on a website.
+- Deleted .pak1 and .pak2 files.
+- > Ngl the most difficult part of this was getting the .EXE small enough to fit on my website.
 
-- If you visit the demo with `https:`, you'll need to change the download link in the input field from `http:` to `https:`, too, as pointed out in issue #1. Ill fix this when I get a chance.
+There are some other things Magnus would like to add to this project:
 
-Our original April 1st 2010 Video: https://www.youtube.com/watch?v=XhMN0wlITLk
-
-Automatically exported from  https://code.google.com/archive/p/quake2-playn-port/
+- [ ] Add multiplayer support.
+- [ ] Add back .pak1 and .pak2 files.
+- [ ] Fix lighting.

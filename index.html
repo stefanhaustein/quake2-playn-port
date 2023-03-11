@@ -1,60 +1,162 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Play Quake II Demo</title>
-  </head>
-  <body style="background-color:#000;color:#ddd;border:0;margin:0;padding:0">
-    <div id="splash" style="margin:20px">
-      <tt><a href='' style="color:#ddd">Play</a> Quake II Demo.<br><br>
-This currently works only in Google Chrome, which is the only browser with support for the
-FileSystem API.<br><br>We'd <em>love</em> to use IndexedDb and support FireFox, but we need
-<a style="color:#ddd" href="http://lists.w3.org/Archives/Public/public-webapps/2013JulSep/0081.html">URL access to the stored data</a> (<a style="color:#ddd" href="https://plus.google.com/103079366341809665805/posts/MeN6DUY9vqL">explanation</a>). 
-<br>
-So we'll add support when the corresponding proposal is implemented.
-<br>
-<br>
 
-<br></tt>
-<div id="download_dialog" style="display:none">
-<tt>
-Play Quake II Demo:<br>
-</tt>
- <input type="hidden" id="source_url" size="100" value="http://commondatastorage.googleapis.com/quake2demo/q2-314-demo-x86.exe"> 
- <input id="download_button" type="button" value="Start" onclick="this.disabled=true; downloadAndUnpack()"><br>
-</div>
-<pre id="log">
-</pre><div id="log-bottom"></div>
-    </div>
-    <div style="margin-left: auto;
-  margin-right: auto; width:800px;height:500px;visibility:hidden" id='playn-root'></div>
-    <script src="lib/idb.filesystem.js"></script>
-    <script src="lib/zip.js"></script>
-    <script src="lib/zip-ext.js"></script>
-    <script src="lib/inflate.js"></script>
-    <script src="download.js"></script>
-    <script src="PlayNQuake/PlayNQuake.nocache.js"></script>
-  </body>
+<head>
+  <title>Quake II</title>
+  <style>
+    ::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
+
+    body {
+      background-color: #000;
+      color: #ddd;
+      border: 0;
+      margin: 0;
+    }
+
+    #splash {
+      color: #ddd;
+      border: 0;
+      margin: 20px;
+      padding: 0;
+      position: absolute;
+    }
+
+    #playn-root {
+      margin-top: 1px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 800px;
+      height: 600px;
+      visibility: hidden;
+      position: relative;
+    }
+
+    #log {
+      margin: 20px;
+      color: #06de88;
+      bottom: 0%;
+      position: fixed;
+      visibility: visible;
+    }
+
+    #download_dialog {
+      margin: 20px;
+      bottom: 30%;
+      position: fixed;
+      visibility: visible;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div id="splash">
+    <tt>Welcome to the home of the worlds first <b>FULL VERSION</b> of Quake II running on the web!
+      <br>
+      <br>
+      <hr>
+      <b><u>DO NOT CLOSE OR REFRESH THE PAGE UNTIL YOU CAN ACTUALLY PLAY THE DAMN GAME!<br>BE.PATIENT. IF THE TEXT IS JUST SITTING THERE, LEAVE THE PAGE ALONE!<br>YOU CAN LEAVE THE PAGE, BUT DON'T CLOSE IT!</u></b>
+      <hr>
+      <br>
+      This, unlike every other port, runs the PC files, and isn't an emulation of Quake II for the N64.
+      <br>
+      This currently works only in Google Chrome, which is the only browser with support for the
+      FileSystem API.
+      <br>
+      This project was first started <a style="color:#ddd" href="https://github.com/stefanhaustein/quake2-playn-port"><b>Here</b></a>, then Magnus fixed it <a style="color:#ddd" href="https://github.com/MagnusMarx/Quake2-PlayN-MagnusPort"><b>Here</b></a>, ever since, Magnus wasn't able to figure ->
+      <br>
+      out how to make a full port, until <em>one morning, on 12/21/2022 @ 12pm</em> Magnus had an itch.
+      <br>
+      He dug deeper and deeper into this seemingly endless rabbit hole, and thus the birth of the PlayN-Quake-II-Magnus-Port.
+      <br><br>We'd <em>love</em> to use IndexedDb and support FireFox, but we need
+      <a style="color:#ddd" href="http://lists.w3.org/Archives/Public/public-webapps/2013JulSep/0081.html">URL access to the stored data</a> (<a style="color:#ddd" href="https://plus.google.com/103079366341809665805/posts/MeN6DUY9vqL">explanation</a>).
+      <br>
+      So we'll add support when the corresponding proposal is implemented.
+      <br>
+      <br>
+      <br>
+  </div>
+
+  </tt>
+  <div id="download_dialog">
+    <tt>
+      Play Quake II:<br>
+    </tt>
+    <input type="hidden" id="source_url" size="100" value="./Quake2.exe">
+
+    <script>
+      function trash() {
+        document.addEventListener('contextmenu', function (e) {
+          return true;
+        });
+        console.log("Ran")
+        // Broadcast that you're opening a page.
+        localStorage.openpages = Date.now();
+        window.addEventListener('storage', function (e) {
+          if (e.key == "openpages") {
+            // Listen if anybody else is opening the same page!
+            localStorage.page_available = Date.now();
+          }
+          if (e.key == "page_available") {
+            function getConfirmation() {
+              let tet = ""
+              let i = 0;
+              var retVal = confirm("Close this page because another is already opened.");
+              if (retVal == true) {
+                do {
+                  alert("CLOSE IT!");
+                }
+                while (i < 1);
+                return true;
+              } else {
+                do {
+                  alert("CLOSE IT!");
+                }
+                while (i < 1);
+                return false;
+              }
+            }
+          }
+        }, false);
+      }
+      window.addEventListener("load", (event) => {
+        // console.clear();
+        trash();
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        console.warn("page is fully loaded");
+      });
+
+      function hide() {
+        var y = document.getElementById("download_dialog");
+        if (y.style.display === "none") {
+          y.style.display = "block";
+        } else {
+          y.style.display = "none";
+        }
+        var x = document.getElementById("splash");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    </script>
+
+    <input id="download_button" type="button" value="Start" onclick="downloadAndUnpack(); hide();">
+  </div>
+  <pre id="log">
+</pre>
+  <div id="log-bottom"></div>
+  <div id='playn-root'></div>
+  <script src="./lib/idb.filesystem.js"></script>
+  <script src="./lib/zip.js"></script>
+  <script src="./lib/zip-ext.js"></script>
+  <script src="./lib/inflate.js"></script>
+  <script src="./download.js"></script>
+  <script src="./PlayNQuake/PlayNQuake.nocache.js"></script>
+</body>
+
 </html>
-
-<!--<script type="text/javascript">
-document.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-});
-document.onkeydown = function(e) {
-  if(event.keyCode == 123) {
-     return false;
-  }
-  if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-     return false;
-  }
-  if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-     return false;
-  }
-  if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-     return false;
-  }
-  if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-     return false;
-  }
-}
-</script>
