@@ -20,22 +20,22 @@ Thus the birth of the PlayN-Quake-II-Magnus-Port.
 
 For the more avid readers, here is a more indepth look at the additions Magnus made:
 
-> [^1] The original source code was added to the project.
+> [^1]: The original source code was added to the project.
 
-> [^2] Magnus created download.js.
+> [^2]: Magnus created download.js.
 
-> [^3] Magnus created PlayNQuake folder adding the following:
+> [^3]: Magnus created PlayNQuake folder adding the following:
 - E635C924D74AFB6527B814C542FC5B1C.cache.html (correcting audio issues, setting initial spawn map, enabling save and load states).
 - PlayNQuake.nocache.js.
 
-> [^4] Magnus edited original HTML file.
+> [^4]: Magnus edited original HTML file.
 
-> [^5] Magnus has done the following with the Quake2.EXE file:
+> [^5]: Magnus has done the following with the Quake2.EXE file:
 - Deleted all unnecessary files.
 - Added Quake 2 game assets.
 - Edited config file to better suit usage hosted on a website.
 - Deleted .pak1 and .pak2 files.
-- > Ngl the most difficult part of this was getting the .EXE small enough to fit on my website.
+> - Ngl the most difficult part of this was getting the .EXE small enough to fit on my website.
 
 There are some other things Magnus would like to add to this project:
 
